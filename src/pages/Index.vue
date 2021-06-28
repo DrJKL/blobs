@@ -1,21 +1,23 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <example-component
+    <game-canvas></game-canvas>
+    <!-- <example-component
       title="Example component"
       active
       :todos="todos"
       :meta="meta"
-    ></example-component>
+    ></example-component> -->
   </q-page>
 </template>
 
 <script lang="ts">
 import { Todo, Meta } from 'components/models';
 import ExampleComponent from 'components/ClassComponent.vue';
+import GameCanvas from 'components/GameCanvas.vue';
 import { Vue, Options } from 'vue-class-component'
 
 @Options({
-  components: { ExampleComponent }
+  components: { ExampleComponent, GameCanvas }
 })
 export default class PageIndex extends Vue {
   todos: Todo[] = [
