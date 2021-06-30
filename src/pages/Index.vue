@@ -1,12 +1,7 @@
 <template>
   <q-page class="row items-center justify-evenly">
     <game-canvas></game-canvas>
-    <!-- <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component> -->
+    <buddies-component></buddies-component>
   </q-page>
 </template>
 
@@ -14,10 +9,11 @@
 import { Todo, Meta } from 'components/models';
 import ExampleComponent from 'components/ClassComponent.vue';
 import GameCanvas from 'components/GameCanvas.vue';
+import BuddiesComponent from 'components/BuddiesComponent.vue';
 import { Vue, Options } from 'vue-class-component'
 
 @Options({
-  components: { ExampleComponent, GameCanvas }
+  components: { ExampleComponent, GameCanvas, BuddiesComponent }
 })
 export default class PageIndex extends Vue {
   todos: Todo[] = [

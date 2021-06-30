@@ -1,14 +1,6 @@
 <template>
-  <q-item
-    clickable
-    tag="a"
-    target="_blank"
-    :href="link"
-  >
-    <q-item-section
-      v-if="icon"
-      avatar
-    >
+  <q-item clickable tag="a" target="_blank" :href="link">
+    <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" />
     </q-item-section>
 
@@ -22,15 +14,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, prop, Options } from 'vue-class-component';
-
-class Props {
-  readonly title!: string;
-  readonly caption = prop({ default: '' });
-  readonly link = prop({ default: '#' });
-  readonly icon = prop({ default: '' });
-}
+import { Vue, Options } from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
 
 @Options({})
-export default class EssentialLink extends Vue.with(Props) {}
+export default class EssentialLink extends Vue {
+  @Prop(String) title!: string;
+  @Prop({ default: '' }) caption!: string | undefined;
+  @Prop({ default: '#' }) link!: string | undefined;
+  @Prop({ default: '' }) icon!: string | undefined;
+}
 </script>
