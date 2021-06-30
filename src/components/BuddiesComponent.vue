@@ -2,7 +2,11 @@
   <div class="game-canvas-container">
     <h1>Other One {{ num }}</h1>
 
-    <div id="p5-container" ref="p5Container" @selectstart="doNothing($event)"> </div>
+    <div
+      id="p5-container"
+      ref="p5Container"
+      @selectstart="doNothing($event)"
+    ></div>
   </div>
 </template>
 
@@ -11,7 +15,7 @@ import { Vue } from 'vue-class-component';
 import { Ref } from 'vue-property-decorator';
 import { Subscription, timer } from 'rxjs';
 import p5 from 'p5';
-import {buddiesSketch} from '../buddies/buddies_sketch';
+import { buddiesSketch } from '../buddies/buddies_sketch';
 export default class ComponentName extends Vue {
   num = 0;
 
@@ -20,12 +24,11 @@ export default class ComponentName extends Vue {
   p5Handle?: p5;
 
   mounted() {
-
     this.p5Handle = new p5(buddiesSketch, this.p5Container);
   }
 
   doNothing(event: MouseEvent) {
-
+    event.preventDefault();
     // DO NOTHING
   }
 }
