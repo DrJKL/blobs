@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts">
-import { Todo, Meta } from 'components/models';
 import ExampleComponent from 'components/ClassComponent.vue';
 import GameCanvas from 'components/GameCanvas.vue';
 import BuddiesComponent from 'components/BuddiesComponent.vue';
@@ -16,35 +15,9 @@ import { Vue, Options } from 'vue-class-component'
   components: { ExampleComponent, GameCanvas, BuddiesComponent }
 })
 export default class PageIndex extends Vue {
-  todos: Todo[] = [
-    {
-      id: 1,
-      content: 'ct1'
-    },
-    {
-      id: 2,
-      content: 'ct2'
-    },
-    {
-      id: 3,
-      content: 'ct3'
-    },
-    {
-      id: 4,
-      content: 'ct4'
-    },
-    {
-      id: 5,
-      content: 'ct5'
-    }
-  ];
-  meta: Meta = {
-    totalCount: 1200
-  };
+  
   created() {
-    for (let i = 0; i < 40; i++) {
-      this.todos.push({id: i, content: `ct${i}`});
-    }
+    // Do Nothing
   }
 };
 </script>
