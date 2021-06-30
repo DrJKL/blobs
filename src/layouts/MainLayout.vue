@@ -13,8 +13,8 @@
 
         <q-toolbar-title> Quasar App </q-toolbar-title>
 
-        <q-btn round flat to="/" icon="swipe"></q-btn>
-        <q-btn round flat to="/buddies" icon="fa fa-peace"></q-btn>
+        <q-btn round flat to="/" icon="fa fa-object-group"></q-btn>
+        <q-btn round flat to="/buddies" icon="fa fa-splotch"></q-btn>
 
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>

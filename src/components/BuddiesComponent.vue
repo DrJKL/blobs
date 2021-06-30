@@ -1,6 +1,6 @@
 <template>
   <div class="game-canvas-container">
-    <h1>Other One {{ num }}</h1>
+    <h1>Blob Friends {{ num }}</h1>
 
     <div
       id="p5-container"
@@ -13,7 +13,6 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component';
 import { Ref } from 'vue-property-decorator';
-import { Subscription, timer } from 'rxjs';
 import p5 from 'p5';
 import { buddiesSketch } from '../buddies/buddies_sketch';
 export default class ComponentName extends Vue {
