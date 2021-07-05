@@ -1,7 +1,5 @@
 <template>
   <div class="game-canvas-container">
-    <h1>Blob Friends {{ num }}</h1>
-
     <div
       id="p5-container"
       ref="p5Container"
@@ -13,25 +11,30 @@
       <div class="row maxBuddies">{{ maxBuddies }} Max Buddies</div>
     </div>
 
-    <div class="game-controls row">
-      <q-btn
-        outline
-        rounded
-        push
-        color="primary"
-        class="col"
-        @click="iThinkItsClearingUp()"
-        >Less Fog</q-btn
-      >
-      <q-btn
-        outline
-        rounded
-        push
-        color="primary"
-        class="col"
-        @click="isItGettingDarker()"
-        >More Fog</q-btn
-      >
+    <div class="game-controls col">
+      <div class="row">
+        <q-btn
+          outline
+          rounded
+          push
+          color="primary"
+          class="col"
+          @click="iThinkItsClearingUp()"
+          >Less Fog</q-btn
+        >
+        <q-btn
+          outline
+          rounded
+          push
+          color="primary"
+          class="col"
+          @click="isItGettingDarker()"
+          >More Fog</q-btn
+        >
+      </div>
+      <div class="row">
+        <q-slider v-model="fogValue" color="red" :step="1" :min="0" :max="10" />
+      </div>
     </div>
   </div>
 </template>
@@ -43,8 +46,6 @@ import p5 from 'p5';
 import { buddiesSketch } from '../buddies/buddies_sketch';
 
 import { namespace } from 'vuex-class';
-import { StateInterface, useStore } from 'src/store';
-import { Store } from 'vuex';
 import GameStore from '../store/game_store';
 
 const gameModule = namespace('gamestore');
@@ -53,28 +54,27 @@ const gameModule = namespace('gamestore');
   name: 'Buddies!',
 })
 export default class ComponentName extends Vue {
-  num = 0;
-
   @Ref() p5Container!: HTMLDivElement | undefined;
 
   p5Handle?: p5;
-  storeMebbe?: Store<StateInterface>;
-
-  beforeMount() {
-    this.storeMebbe = useStore();
-  }
 
   mounted() {
-    this.p5Handle = new p5(buddiesSketch, this.p5Container);
+    if (!this.p5Handle) {
+      this.p5Handle = new p5(buddiesSketch, this.p5Container);
+    }
   }
   unmounted() {
     this.p5Handle?.noLoop();
   }
 
-  @gameModule.Getter
-  private fogValue!: number;
+  get fogValue() {
+    return GameStore.fogValue;
+  }
+  set fogValue(newValue: number) {
+    GameStore.setFogValue(newValue);
+  }
 
-  @gameModule.Getter
+  @gameModule.State
   private maxBuddies!: number;
 
   @gameModule.Action

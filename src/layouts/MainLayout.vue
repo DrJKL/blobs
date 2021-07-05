@@ -11,12 +11,10 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-toolbar-title> Blob Friends </q-toolbar-title>
 
         <q-btn round flat to="/" icon="fa fa-object-group"></q-btn>
         <q-btn round flat to="/buddies" icon="fa fa-splotch"></q-btn>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 

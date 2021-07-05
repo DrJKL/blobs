@@ -16,11 +16,11 @@ export const buddiesSketch = (p: p5) => {
 
     function handleFog() {
         const fogValue = GameStore.fogValue;
-        if (fogValue / 0.025 === 10) {
+        if (fogValue === 10) {
             p.background(p.color(0, 0, 0, 1));
             return;
         }
-        const backgroundFog = p.color(0, 0, 0, fogValue);
+        const backgroundFog = p.color(0, 0, 0, fogValue * 0.05);
         p.background(backgroundFog);
     }
 
