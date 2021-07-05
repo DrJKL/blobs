@@ -43,7 +43,13 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition name="fade slide" mode="out-in">
+          <keep-alive>
+            <component :is="Component"></component>
+          </keep-alive>
+        </transition>
+      </router-view>
     </q-page-container>
   </q-layout>
 </template>
@@ -63,30 +69,6 @@ const linksList = [
     caption: 'github.com/quasarframework',
     icon: 'code',
     link: 'https://github.com/quasarframework',
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
   },
   {
     title: 'Quasar Awesome',
@@ -109,3 +91,26 @@ export default class MainLayout extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+.q-page-container {
+  overflow: hidden;
+}
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.1s, opacity 0.1s;
+}
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(50%);
+}
+
+.slide-enter-to {
+  transform: translateX(0);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(-50%);
+}
+</style>

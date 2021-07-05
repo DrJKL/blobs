@@ -1,8 +1,9 @@
 import { Posse } from './posse';
 import p5 from 'p5';
 
+import GameStore from 'src/store/game_store';
+
 export const buddiesSketch = (p: p5) => {
-    const fogValue = 100;
     const mouse = p.createVector();
     const posse = new Posse(p);
     p.setup = () => {
@@ -14,6 +15,7 @@ export const buddiesSketch = (p: p5) => {
     };
 
     function handleFog() {
+        const fogValue = GameStore.fogValue;
         if (fogValue / 0.025 === 10) {
             p.background(p.color(0, 0, 0, 1));
             return;

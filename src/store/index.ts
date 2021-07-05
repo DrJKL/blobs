@@ -5,7 +5,8 @@ import {
   Store as VuexStore,
   useStore as vuexUseStore,
 } from 'vuex'
-import game from './game';
+
+// import GameStore from './game_store';
 
 
 // import example from './module-example'
@@ -24,7 +25,8 @@ export interface StateInterface {
   // Define your own store structure, using submodules if needed
   // example: ExampleStateInterface;
   // Declared as unknown to avoid linting issue. Best to strongly type as per the line above.
-  example: unknown
+  example: unknown,
+  // gamestore: GameStore,
 }
 
 // provide typings for `this.$store`
@@ -37,11 +39,12 @@ declare module '@vue/runtime-core' {
 // provide typings for `useStore` helper
 export const storeKey: InjectionKey<VuexStore<StateInterface>> = Symbol('vuex-key')
 
+export const modulesStore = createStore({});
+
 export default store(function (/* { ssrContext } */) {
-  const Store = createStore<StateInterface>({
+  const store = createStore<StateInterface>({
     modules: {
-      // example
-      game
+      // modulesStore
     },
 
     // enable strict mode (adds overhead!)
@@ -49,7 +52,7 @@ export default store(function (/* { ssrContext } */) {
     strict: !!process.env.DEBUGGING
   })
 
-  return Store;
+  return store;
 })
 
 export function useStore() {
