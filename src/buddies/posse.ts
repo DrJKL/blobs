@@ -1,10 +1,16 @@
 import p5, { Vector } from 'p5';
 import { Buddy } from './buddy';
+
+import GameStore from 'src/store/game_store';
+
 export class Posse {
     buddies: Buddy[];
-    maxBuddies = 10;
     constructor(readonly p: p5) {
         this.buddies = [];
+    }
+
+    get maxBuddies() {
+        return GameStore.maxBuddies;
     }
 
     clearSomeOfTheBuddies() {

@@ -14,8 +14,12 @@
         <q-toolbar-title> Blob Friends </q-toolbar-title>
 
         <q-tabs>
-          <q-route-tab icon="fa fa-object-group" to="/" exact />
-          <q-route-tab icon="fa fa-splotch" to="/buddies" exact />
+          <q-route-tab icon="fa fa-object-group" to="/art-i-guess" exact>
+            <q-tooltip>Art, but Modern or something</q-tooltip>
+          </q-route-tab>
+          <q-route-tab icon="fa fa-splotch" to="/" exact>
+            <q-tooltip>The Buddies!</q-tooltip>
+          </q-route-tab>
         </q-tabs>
       </q-toolbar>
     </q-header>
@@ -44,7 +48,7 @@
             title: 'This is a link',
             caption: 'but not really',
             icon: 'fa fa-dice-d20',
-            link: 'javascript:;'
+            link: 'javascript:;',
           }"
         />
       </q-list>
@@ -52,7 +56,7 @@
 
     <q-page-container class="ummmmmm">
       <router-view v-slot="{ Component }">
-        <transition name="slide" >
+        <transition name="slide">
           <keep-alive>
             <component :is="Component"></component>
           </keep-alive>
@@ -106,7 +110,7 @@ export default class MainLayout extends Vue {
 }
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform .4s, opacity .1s;
+  transition: transform 0.4s, opacity 0.1s;
 }
 .slide-enter-from {
   opacity: 0;

@@ -1,0 +1,63 @@
+<template>
+  <div class="game-controls row justify-evenly">
+    <div class="column col justify-evenly">
+      <q-field filled :hint="`Max Buddies ${maxBuddies}`">
+        <template #control>
+          <q-slider
+            v-model="maxBuddies"
+            class="col self-center buddies-slider"
+            color="red"
+            :step="1"
+            :min="0"
+            :max="50"
+            label
+            dark
+          />
+        </template>
+      </q-field>
+    </div>
+    <div class="column col justify-evenly">
+      <q-field filled :hint="`Fog ${fogValue}`">
+        <template #control>
+          <q-slider
+            v-model="fogValue"
+            class="col self-center buddies-slider"
+            color="red"
+            :step="1"
+            :min="0"
+            :max="10"
+            label
+            dark
+          />
+        </template>
+      </q-field>
+    </div>
+  </div>
+</template>
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import GameStore from '../store/game_store';
+
+@Options({
+  name: 'Buddies Controls',
+})
+export default class BuddiesControls extends Vue {
+  get fogValue() {
+    return GameStore.fogValue;
+  }
+  set fogValue(newValue: number) {
+    GameStore.setFogValue(newValue);
+  }
+  get maxBuddies() {
+    return GameStore.maxBuddies;
+  }
+  set maxBuddies(newValue: number) {
+    GameStore.setMaxBuddies(newValue);
+  }
+}
+</script>
+<style lang="scss" scoped>
+.fog-slider {
+  min-height: 10em;
+}
+</style>

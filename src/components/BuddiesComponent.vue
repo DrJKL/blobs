@@ -1,40 +1,14 @@
 <template>
-  <div class="game-canvas-container">
+  <div class="game-canvas-container row">
     <div
       id="p5-container"
       ref="p5Container"
+      class="col buddies-plate"
       @selectstart="doNothing($event)"
     ></div>
 
-    <div class="state col">
-      <div class="row fog">{{ fogValue }} Fog</div>
-      <div class="row maxBuddies">{{ maxBuddies }} Max Buddies</div>
-    </div>
-
-    <div class="game-controls col">
-      <div class="row">
-        <q-btn
-          outline
-          rounded
-          push
-          color="primary"
-          class="col"
-          @click="iThinkItsClearingUp()"
-          >Less Fog</q-btn
-        >
-        <q-btn
-          outline
-          rounded
-          push
-          color="primary"
-          class="col"
-          @click="isItGettingDarker()"
-          >More Fog</q-btn
-        >
-      </div>
-      <div class="row">
-        <q-slider v-model="fogValue" color="red" :step="1" :min="0" :max="10" />
-      </div>
+    <div class="col">
+      <buddies-controls />
     </div>
   </div>
 </template>
@@ -47,11 +21,13 @@ import { buddiesSketch } from '../buddies/buddies_sketch';
 
 import { namespace } from 'vuex-class';
 import GameStore from '../store/game_store';
+import BuddiesControls from './BuddiesControls.vue';
 
 const gameModule = namespace('gamestore');
 
 @Options({
   name: 'Buddies!',
+  components: { BuddiesControls },
 })
 export default class ComponentName extends Vue {
   @Ref() p5Container!: HTMLDivElement | undefined;
@@ -65,13 +41,6 @@ export default class ComponentName extends Vue {
   }
   unmounted() {
     this.p5Handle?.noLoop();
-  }
-
-  get fogValue() {
-    return GameStore.fogValue;
-  }
-  set fogValue(newValue: number) {
-    GameStore.setFogValue(newValue);
   }
 
   @gameModule.State
@@ -94,5 +63,12 @@ export default class ComponentName extends Vue {
 <style lang="scss" scoped>
 .state {
   background: green;
+}
+.game-canvas-container {
+  width: calc(100vw - 120px);
+}
+.buddies-plate ::v-deep canvas {
+  outline: 4px groove $primary;
+  border: 4px groove $positive;
 }
 </style>
