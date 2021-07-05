@@ -1,21 +1,24 @@
 <template>
-  <q-page class="row items-center justify-evenly">
+  <q-page class="row items-center justify-evenly ummmm">
     <game-canvas></game-canvas>
   </q-page>
 </template>
 
 <script lang="ts">
 import GameCanvas from 'components/GameCanvas.vue';
-import BuddiesComponent from 'components/BuddiesComponent.vue';
 import { Vue, Options } from 'vue-class-component'
 
 @Options({
-  components: { GameCanvas, BuddiesComponent }
+  components: { GameCanvas }
 })
 export default class PageIndex extends Vue {
   
-  created() {
-    // Do Nothing
-  }
 };
 </script>
+
+<style lang="scss" scoped>
+.ummmm {
+  grid-column: 1;
+  grid-row: 1;
+}
+</style>

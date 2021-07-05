@@ -39,10 +39,18 @@
           :key="link.title"
           v-bind="link"
         />
+        <EssentialLink
+          v-bind="{
+            title: 'This is a link',
+            caption: 'but not really',
+            icon: 'fa fa-dice-d20',
+            link: 'javascript:;'
+          }"
+        />
       </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container class="ummmmmm">
       <router-view v-slot="{ Component }">
         <transition name="slide" >
           <keep-alive>
@@ -98,7 +106,7 @@ export default class MainLayout extends Vue {
 }
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 5s, opacity 5s;
+  transition: transform .4s, opacity .1s;
 }
 .slide-enter-from {
   opacity: 0;
@@ -112,5 +120,10 @@ export default class MainLayout extends Vue {
 .slide-leave-to {
   opacity: 0;
   transform: translateX(-50%) scale(0.5);
+}
+
+.ummmmmm {
+  display: grid;
+  grid-template: 1fr / 1fr;
 }
 </style>
