@@ -13,8 +13,10 @@
 
         <q-toolbar-title> Blob Friends </q-toolbar-title>
 
-        <q-btn round flat to="/" icon="fa fa-object-group"></q-btn>
-        <q-btn round flat to="/buddies" icon="fa fa-splotch"></q-btn>
+        <q-tabs>
+          <q-route-tab icon="fa fa-object-group" to="/" exact />
+          <q-route-tab icon="fa fa-splotch" to="/buddies" exact />
+        </q-tabs>
       </q-toolbar>
     </q-header>
 
@@ -42,7 +44,7 @@
 
     <q-page-container>
       <router-view v-slot="{ Component }">
-        <transition name="fade slide" mode="out-in">
+        <transition name="slide" >
           <keep-alive>
             <component :is="Component"></component>
           </keep-alive>
@@ -93,15 +95,10 @@ export default class MainLayout extends Vue {
 <style lang="scss">
 .q-page-container {
   overflow: hidden;
-  position: relative;
 }
-.slide-enter-active {
-  position: absolute;
-  transition: transform 0.8s, opacity 0.1s;
-}
+.slide-enter-active,
 .slide-leave-active {
-  position: absolute;
-  transition: transform 0.2s, opacity 0.4s;
+  transition: transform 5s, opacity 5s;
 }
 .slide-enter-from {
   opacity: 0;
