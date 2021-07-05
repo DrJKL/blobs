@@ -93,14 +93,19 @@ export default class MainLayout extends Vue {
 <style lang="scss">
 .q-page-container {
   overflow: hidden;
+  position: relative;
 }
-.slide-enter-active,
+.slide-enter-active {
+  position: absolute;
+  transition: transform 0.8s, opacity 0.1s;
+}
 .slide-leave-active {
-  transition: transform 0.1s, opacity 0.1s;
+  position: absolute;
+  transition: transform 0.2s, opacity 0.4s;
 }
 .slide-enter-from {
   opacity: 0;
-  transform: translateX(50%);
+  transform: translateX(50%) scale(0.5);
 }
 
 .slide-enter-to {
@@ -109,6 +114,6 @@ export default class MainLayout extends Vue {
 
 .slide-leave-to {
   opacity: 0;
-  transform: translateX(-50%);
+  transform: translateX(-50%) scale(0.5);
 }
 </style>
