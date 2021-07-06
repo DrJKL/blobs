@@ -38,7 +38,7 @@ export class Buddy {
     velocity = Vector.random2D();
     acceleration = new Vector();
     size = 15;
-    maxSpeed = this.size / 4;
+    maxSpeed = this.size / 3;
     maxLength = 20;
     body: Segment[];
     colors: Color[];
