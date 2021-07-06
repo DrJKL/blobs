@@ -42,6 +42,7 @@ export const buddiesSketch = (p: p5) => {
             overlay.noFill();
             overlay.circle(mouse.x, mouse.y, 20);
             overlay.circle(mouse.x, mouse.y, 10);
+            p.noCursor();
         }
         const posseGraphics = posse?.p;
         if (posseGraphics)
