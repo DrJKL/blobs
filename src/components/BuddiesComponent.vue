@@ -47,9 +47,6 @@ export default class ComponentName extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.state {
-  background: green;
-}
 .game-canvas-container {
   width: calc(100vw - 120px);
 }
