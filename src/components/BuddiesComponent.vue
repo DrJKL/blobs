@@ -19,10 +19,7 @@ import { Ref } from 'vue-property-decorator';
 import p5 from 'p5';
 import { buddiesSketch } from '../buddies/buddies_sketch';
 
-import { namespace } from 'vuex-class';
 import BuddiesControls from './BuddiesControls.vue';
-
-const gameModule = namespace('gamestore');
 
 @Options({
   name: 'Buddies!',
