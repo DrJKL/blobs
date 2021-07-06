@@ -13,9 +13,7 @@ function defaultDrives() {
 }
 
 export class Segment {
-    color: Color;
-    constructor(readonly p: p5, public position: Vector, opt_color?: Color) {
-        this.color = opt_color || randomColor(p);
+    constructor(readonly p: p5, public position: Vector, public color: Color = randomColor(p)) {
         this.color.setAlpha(0.07);
     }
 
