@@ -4,12 +4,17 @@ import p5, { Vector, Color } from 'p5';
 function randomColor(p: p5): Color {
     return p.color(p.random(100), p.random(50, 100), p.random(50, 100));
 }
+function defaultDrives() {
+    return [
+        new AvoidBordersDrive(),
+        new AvoidOtherBuddiesDrive(),
+        new MoveRandomly(),
+    ];
+}
 
 export class Segment {
-    position: Vector;
     color: Color;
-    constructor(readonly p: p5, position: Vector, opt_color?: Color) {
-        this.position = position;
+    constructor(readonly p: p5, public position: Vector, opt_color?: Color) {
         this.color = opt_color || randomColor(p);
         this.color.setAlpha(0.07);
     }
@@ -29,40 +34,29 @@ export class Segment {
 }
 
 export class Buddy {
-    age: number;
-    velocity: Vector;
-    acceleration: Vector;
-    size: number;
-    maxSpeed: number;
-    maxLength: number;
+    age = 0;
+    velocity = Vector.random2D();
+    acceleration = new Vector();
+    size = 15;
+    maxSpeed = this.size / 4;
+    maxLength = 20;
     body: Segment[];
     colors: Color[];
     secondaryColor: Color;
 
-    drives: Drive[];
+    drives: Drive[] = defaultDrives();
 
-    stomach: Array<unknown>;
-    stomachCapacity: number;
-    calories: number;
+    stomach: Array<unknown> = [];
+    stomachCapacity = 3;
+    calories = 100;
 
     constructor(readonly p: p5, pos: Vector) {
-        this.age = 0;
-
-        this.velocity = Vector.random2D();
-        this.acceleration = p.createVector();
-        this.size = 15;
-
-        this.maxSpeed = this.size / 4;
-        this.maxLength = 100;
-
-        p.colorMode(p.RGB, 255, 255, 255, 1);
         this.colors = [
-            this.p.color(255, 106, 213, 0.07),
-            this.p.color(199, 116, 232, 0.07),
-            this.p.color(173, 140, 255, 0.07),
-            this.p.color(135, 149, 232, 0.07),
+            this.p.color(316, 58, 99, 0.07),
+            this.p.color(283, 50, 91, 0.07),
+            this.p.color(257, 45.1, 100, 0.07),
+            this.p.color(231, 41.8, 91, 0.07),
         ];
-        p.colorMode(p.HSB, 360, 100, 100, 1);
         this.secondaryColor = randomColor(p);
         this.secondaryColor.setAlpha(0.2);
 
@@ -70,16 +64,6 @@ export class Buddy {
         this.body = [
             new Segment(p, pos.copy(), this.colors[0]),
         ];
-
-        this.drives = [
-            new AvoidBordersDrive(),
-            new AvoidOtherBuddiesDrive(),
-            new MoveRandomly(),
-        ];
-
-        this.stomach = [];
-        this.stomachCapacity = 3;
-        this.calories = 100;
     }
 
     get position() {
