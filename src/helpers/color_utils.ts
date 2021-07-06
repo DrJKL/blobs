@@ -47,8 +47,8 @@ export function analogous(p: p5, color: Color): [Color, Color, Color] {
     const hue = p.hue(color);
     const sat = p.saturation(color);
     const brightness = p.brightness(color);
-    const nHue1 = (hue + 30) % 360;
-    const nHue2 = (hue - 30) % 360;
+    const nHue1 = (hue + 15) % 360;
+    const nHue2 = (hue - 15) % 360;
     const nColor1 = p.color(nHue1, sat, brightness);
     const nColor2 = p.color(nHue2, sat, brightness);
     return [color, nColor1, nColor2];
