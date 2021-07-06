@@ -66,6 +66,7 @@ export default class ComponentName extends Vue {
   width: calc(100vw - 120px);
 }
 .buddies-plate ::v-deep canvas {
+  box-sizing: content-box;
   outline: 4px groove $primary;
   border: 4px groove $positive;
 }
