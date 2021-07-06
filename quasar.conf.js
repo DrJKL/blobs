@@ -75,7 +75,7 @@ module.exports = configure(function (ctx) {
       chainWebpack (/* chain */) {
         //
       },
-      publicPath: '://drjkl.github.io/blobs',
+      publicPath: 'blobs',
       distDir: 'docs'
     },
 
