@@ -54,8 +54,6 @@ export default class ComponentName extends Vue {
   doNothing(event: MouseEvent) {
     event.preventDefault();
     // DO NOTHING
-    const gs = GameStore;
-    console.log(gs, GameStore);
   }
 }
 </script>
