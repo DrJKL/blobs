@@ -1,13 +1,11 @@
-import p5, { Vector } from 'p5';
+import { Graphics, Vector } from 'p5';
 import { Buddy } from './buddy';
 
 import GameStore from 'src/store/game_store';
 
 export class Posse {
-    buddies: Buddy[];
-    constructor(readonly p: p5) {
-        this.buddies = [];
-    }
+    buddies: Buddy[] = [];
+    constructor(readonly p: Graphics) { }
 
     get maxBuddies() {
         return GameStore.maxBuddies;
@@ -33,7 +31,6 @@ export class Posse {
                 this.p.random(this.p.height)
             );
         this.buddies.push(new Buddy(this.p, location));
-        // state.buddiesCount++;
     }
 
     doTheThing() {

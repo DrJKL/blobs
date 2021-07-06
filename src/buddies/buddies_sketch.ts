@@ -1,49 +1,58 @@
 import { Posse } from './posse';
-import p5 from 'p5';
+import p5, { Graphics } from 'p5';
 
 import GameStore from 'src/store/game_store';
 
 export const buddiesSketch = (p: p5) => {
     const mouse = p.createVector();
-    const posse = new Posse(p);
+    let posse: Posse | undefined;
+    let mainGraphics: Graphics | undefined;
+    let overlay: Graphics | undefined;
+    const WIDTH = 600;
+    const HEIGHT = 600;
     p.setup = () => {
-        p.createCanvas(600, 600);
-        p.colorMode(p.HSB, 360, 100, 100, 1);
-        p.background(0, 0, 100);
-        // makeControls();
-        // statBlock = document.querySelector('pre');
+        p.createCanvas(WIDTH, HEIGHT);
+        mainGraphics = p.createGraphics(WIDTH, HEIGHT);
+        mainGraphics.colorMode(p.HSB, 360, 100, 100, 1);
+        overlay = p.createGraphics(WIDTH, HEIGHT);
+        overlay.colorMode(p.HSB, 360, 100, 100, 1);
+        posse = new Posse(mainGraphics);
     };
 
     function handleFog() {
+        if (!mainGraphics) { return; }
         const fogValue = GameStore.fogValue;
         if (fogValue === 10) {
-            p.background(p.color(0, 0, 0, 1));
+            mainGraphics.background(mainGraphics.color(0, 0, 0, 1));
             return;
         }
-        const backgroundFog = p.color(0, 0, 0, fogValue * 0.05);
-        p.background(backgroundFog);
+        const backgroundFog = mainGraphics.color(0, 0, 0, fogValue * 0.05);
+        mainGraphics.background(backgroundFog);
     }
 
     p.draw = () => {
         mouse.x = p.mouseX;
         mouse.y = p.mouseY;
         handleFog();
-        posse.doTheThing();
-        // statBlock.innerHTML = JSON.stringify({
-        //     ...state,
-        //     frameCount
-        // }, undefined, 1);
-        if (p.mouseIsPressed) {
-            p.stroke(0, 0, 100, 0.8);
-            p.strokeWeight(1);
-            p.noFill();
-            p.circle(mouse.x, mouse.y, 20);
+        posse?.doTheThing();
+        overlay?.clear();
+        if (overlay && p.mouseIsPressed) {
+            overlay.stroke(0, 0, 100, 0.8);
+            overlay.strokeWeight(1);
+            overlay.noFill();
+            overlay.circle(mouse.x, mouse.y, 20);
+            overlay.circle(mouse.x, mouse.y, 10);
         }
+        const posseGraphics = posse?.p;
+        if (posseGraphics)
+            p.image(posseGraphics, 0, 0);
+        if (overlay)
+            p.image(overlay, 0, 0, WIDTH, HEIGHT);
     };
 
     p.keyPressed = () => {
-        if (p.keyCode === 32) {
-            p.background(0);
+        if (p.key === ' ') {
+            mainGraphics?.background(mainGraphics.color(0, 0, 0, 1));
         }
     };
 
@@ -54,7 +63,7 @@ export const buddiesSketch = (p: p5) => {
             p.mouseY > 0 &&
             p.mouseY < p.height
         ) {
-            posse.addNewBuddy(p.createVector(p.mouseX, p.mouseY));
+            posse?.addNewBuddy(p.createVector(p.mouseX, p.mouseY));
         }
     };
 };
