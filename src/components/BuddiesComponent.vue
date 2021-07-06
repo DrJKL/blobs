@@ -20,7 +20,6 @@ import p5 from 'p5';
 import { buddiesSketch } from '../buddies/buddies_sketch';
 
 import { namespace } from 'vuex-class';
-import GameStore from '../store/game_store';
 import BuddiesControls from './BuddiesControls.vue';
 
 const gameModule = namespace('gamestore');
@@ -43,14 +42,6 @@ export default class ComponentName extends Vue {
     this.p5Handle?.noLoop();
   }
 
-  @gameModule.State
-  private maxBuddies!: number;
-
-  @gameModule.Action
-  iThinkItsClearingUp!: () => void;
-  @gameModule.Action
-  isItGettingDarker!: () => void;
-
   doNothing(event: MouseEvent) {
     event.preventDefault();
     // DO NOTHING
@@ -65,7 +56,7 @@ export default class ComponentName extends Vue {
 .game-canvas-container {
   width: calc(100vw - 120px);
 }
-.buddies-plate ::v-deep canvas {
+.buddies-plate :deep(canvas) {
   box-sizing: content-box;
   outline: 4px groove $primary;
   border: 4px groove $positive;
