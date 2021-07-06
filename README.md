@@ -2,25 +2,7 @@
 
 A thing that has stuff in it
 
-## Install the dependencies
-```bash
-npm install
-```
+Mostly friends. Who are blobs.
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
-
-### Lint the files
-```bash
-npm run lint
-```
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.conf.js](https://v2.quasar.dev/quasar-cli/quasar-conf-js).
+http://drjkl.github.io/blobs
+👆
