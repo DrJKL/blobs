@@ -26,41 +26,32 @@ export class GameStoreModule extends VuexModule {
     public maxBuddies = 2;
     public fogValue = 1;
     private readonly MAX_FOG_VALUE = 10;
+    private readonly MAX_MAX_BUDDIES = 50;
 
     @Mutation
     public setMaxBuddies(newMax: number) {
-        this.maxBuddies = newMax;
-    }
+      this.maxBuddies = Math.max(0, Math.min(newMax, this.MAX_MAX_BUDDIES));
+  }
 
     @Mutation
     public setFogValue(newValue: number) {
-        this.fogValue = newValue;
-    }
+      this.fogValue = Math.max(0, Math.min(newValue, this.MAX_FOG_VALUE));
+  }
 
     @Mutation
     public alterFog(fogDelta: number) {
         this.fogValue += fogDelta;
     }
 
-    @Mutation
-    public constrainFogValue() {
-        const initialFog = this.fogValue;
-        const clampedFog = Math.max(0, Math.min(initialFog, this.MAX_FOG_VALUE));
-        const roundedFog = parseFloat(clampedFog.toFixed(2));
-        this.fogValue = roundedFog;
-    }
-
     @Action
     public isItGettingDarker() {
         this.alterFog(+1);
-        this.constrainFogValue();
-    }
+  }
 
     @Action
     public iThinkItsClearingUp() {
         this.alterFog(-1);
-        this.constrainFogValue();
-    }
+  }
 }
 
 export default getModule(GameStoreModule);
