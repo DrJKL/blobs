@@ -12,6 +12,7 @@
             :max="50"
             label
             dark
+            @wheel="maxBuddiesScroll"
           />
         </template>
       </q-field>
@@ -28,6 +29,7 @@
             :max="10"
             label
             dark
+            @wheel="fogValueScroll"
           />
         </template>
       </q-field>
@@ -53,6 +55,13 @@ export default class BuddiesControls extends Vue {
   }
   set maxBuddies(newValue: number) {
     GameStore.setMaxBuddies(newValue);
+  }
+
+  maxBuddiesScroll(event: WheelEvent) {
+    this.maxBuddies = this.maxBuddies - Math.sign(event.deltaY);
+  }
+  fogValueScroll(event: WheelEvent) {
+    this.fogValue = this.fogValue - Math.sign(event.deltaY);
   }
 }
 </script>
