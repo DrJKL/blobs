@@ -1,9 +1,17 @@
-import { AvoidBordersDrive, AvoidOtherBuddiesDrive, Drive, MoveRandomly } from './drives';
+import {
+    AvoidBordersDrive,
+    AvoidOtherBuddiesDrive,
+    Drive,
+    MoveRandomly,
+} from './drives';
 import p5, { Vector, Color } from 'p5';
+import { analogous } from 'src/helpers/color_utils';
+import BuddyStore from '../store/buddy_store';
 
 function randomColor(p: p5): Color {
-    return p.color(p.random(100), p.random(50, 100), p.random(50, 100));
+    return p.color(p.random(360), p.random(40, 100), p.random(80, 100));
 }
+
 function defaultDrives() {
     return [
         new AvoidBordersDrive(),
@@ -12,15 +20,28 @@ function defaultDrives() {
     ];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function ogColors(p: p5) {
+    return [
+        p.color(316, 58, 99, 0.07),
+        p.color(283, 50, 91, 0.07),
+        p.color(257, 45.1, 100, 0.07),
+        p.color(231, 41.8, 91, 0.07),
+    ];
+}
+
 export class Segment {
-    constructor(readonly p: p5, public position: Vector, public color: Color = randomColor(p)) {
-        this.color.setAlpha(0.07);
+    constructor(
+        readonly p: p5,
+        public position: Vector,
+        public color: Color = randomColor(p)
+    ) {
+        this.color.setAlpha(0.27);
     }
 
     render() {
+        this.p.noStroke();
         this.p.fill(this.color);
-        this.p.stroke(this.p.color(0, 0, 100, 0.01));
-        this.p.strokeWeight(1);
         this.p.circle(this.position.x, this.position.y, this.position.z);
     }
 
@@ -33,10 +54,13 @@ export class Segment {
 
 export class Buddy {
     age = 0;
+    alive = true;
     velocity = Vector.random2D();
     acceleration = new Vector();
     size = 15;
-    maxSpeed = this.size / 3;
+    get maxSpeed() {
+        return this.size / 4;
+    }
     maxLength = 20;
     body: Segment[];
     colors: Color[];
@@ -49,19 +73,12 @@ export class Buddy {
     calories = 100;
 
     constructor(readonly p: p5, pos: Vector) {
-        this.colors = [
-            this.p.color(316, 58, 99, 0.07),
-            this.p.color(283, 50, 91, 0.07),
-            this.p.color(257, 45.1, 100, 0.07),
-            this.p.color(231, 41.8, 91, 0.07),
-        ];
+        this.colors = analogous(p, randomColor(p));
         this.secondaryColor = randomColor(p);
         this.secondaryColor.setAlpha(0.2);
 
         pos.z = this.velocity.mag();
-        this.body = [
-            new Segment(p, pos.copy(), this.colors[0]),
-        ];
+        this.body = [new Segment(p, pos.copy(), this.colors[0])];
     }
 
     get position() {
@@ -69,7 +86,14 @@ export class Buddy {
     }
 
     draw(buddies: Buddy[]) {
+        if (!this.alive) {
+            return;
+        }
         this.age++;
+        if (this.age > BuddyStore.ageLimit) {
+            this.alive = false;
+            console.log('💀');
+        }
 
         this.move(buddies);
         this.renderBody();
@@ -80,7 +104,6 @@ export class Buddy {
         for (const pos of this.body) {
             pos.render();
             pos.position.z *= 0.99;
-
         }
         this.drawForce(this.velocity, this.position);
     }
@@ -111,8 +134,7 @@ export class Buddy {
     }
 
     changeVelocity() {
-        this.velocity.add(this.acceleration)
-            .limit(this.maxSpeed);
+        this.velocity.add(this.acceleration).limit(this.maxSpeed);
 
         while (this.body.length >= this.maxLength) {
             this.body.pop();
@@ -121,7 +143,9 @@ export class Buddy {
         const segColor = this.colors[segColorIndex];
         const newSegment = this.body[0].copy(
             this.velocity,
-            (this.size * 2) / this.p.max(this.velocity.mag(), 1), segColor);
+            (this.size * 2) / this.p.max(this.velocity.mag(), 1),
+            segColor
+        );
         this.body.unshift(newSegment);
         this.acceleration.mult(0);
     }
@@ -131,5 +155,4 @@ export class Buddy {
         desired.limit(3);
         this.applyForce(desired);
     }
-
 }

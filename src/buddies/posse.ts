@@ -18,7 +18,10 @@ export class Posse {
     }
 
     makeAllTheBuddies() {
-        while (this.buddies.length < this.maxBuddies) {
+        const limitPerRound = Math.floor(Math.random() * 2);
+        let buddiesThisRound = 0;
+        while (this.buddies.length < this.maxBuddies && buddiesThisRound < limitPerRound) {
+            ++buddiesThisRound;
             this.addNewBuddy();
         }
     }
@@ -35,6 +38,7 @@ export class Posse {
 
     doTheThing() {
         this.buddies.forEach((buddy) => buddy.draw(this.buddies));
+        this.buddies = this.buddies.filter(buddy => buddy.alive);
         this.clearSomeOfTheBuddies();
         this.makeAllTheBuddies();
     }
