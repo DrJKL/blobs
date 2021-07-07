@@ -7,7 +7,7 @@
       @selectstart="doNothing($event)"
     ></div>
 
-    <div class="col">
+    <div class="col column">
       <buddies-controls />
     </div>
   </div>

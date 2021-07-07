@@ -1,3 +1,4 @@
+import SketchStore from 'src/store/sketch_store';
 import {
     AvoidBordersDrive,
     AvoidOtherBuddiesDrive,
@@ -52,6 +53,10 @@ export class Segment {
     }
 }
 
+export class Egg {
+
+}
+
 export class Buddy {
     age = 0;
     alive = true;
@@ -97,6 +102,7 @@ export class Buddy {
 
         this.move(buddies);
         this.renderBody();
+        this.renderDebug();
     }
 
     renderBody() {
@@ -106,6 +112,13 @@ export class Buddy {
             pos.position.z *= 0.99;
         }
         this.drawForce(this.velocity, this.position);
+    }
+    renderDebug() {
+        const d = SketchStore.debugGraphic;
+        if (!d || !SketchStore.isDebug) { return; }
+        d.fill(0, 0, 100, 1);
+        d.textSize(32);
+        d.text(`${this.age}`, this.position.x, this.position.y - 20);
     }
 
     move(buddies: Buddy[]) {

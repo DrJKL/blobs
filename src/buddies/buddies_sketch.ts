@@ -2,26 +2,40 @@ import { Posse } from './posse';
 import p5, { Graphics } from 'p5';
 
 import GameStore from 'src/store/game_store';
+import SketchStore from 'src/store/sketch_store';
 
 export const buddiesSketch = (p: p5) => {
     const mouse = p.createVector();
     let posse: Posse | undefined;
     let mainGraphics: Graphics | undefined;
     let overlay: Graphics | undefined;
+    let debugOverlay: Graphics | undefined;
     const WIDTH = 600;
     const HEIGHT = 600;
     p.setup = () => {
         p.createCanvas(WIDTH, HEIGHT);
         p.frameRate(144);
+        SketchStore.initP(p);
+
         mainGraphics = p.createGraphics(WIDTH, HEIGHT);
         mainGraphics.colorMode(p.HSB, 360, 100, 100, 1);
+        SketchStore.initGraphics(mainGraphics);
+
         overlay = p.createGraphics(WIDTH, HEIGHT);
         overlay.colorMode(p.HSB, 360, 100, 100, 1);
-        posse = new Posse(mainGraphics);
+        SketchStore.initOverlay(overlay);
+
+        debugOverlay = p.createGraphics(WIDTH, HEIGHT);
+        debugOverlay.colorMode(p.HSB, 360, 100, 100, 1);
+        SketchStore.initDebugOverlay(debugOverlay);
+
+        posse = new Posse();
     };
 
     function handleFog() {
-        if (!mainGraphics) { return; }
+        if (!mainGraphics) {
+            return;
+        }
         const fogValue = GameStore.fogValue;
         if (fogValue === 10) {
             mainGraphics.background(mainGraphics.color(0, 0, 0, 1));
@@ -35,21 +49,22 @@ export const buddiesSketch = (p: p5) => {
         mouse.x = p.mouseX;
         mouse.y = p.mouseY;
         handleFog();
-        posse?.doTheThing();
+        debugOverlay?.clear();
         overlay?.clear();
+        posse?.doTheThing();
         if (overlay && p.mouseIsPressed) {
-            overlay.stroke(0, 0, 100, 0.8);
-            overlay.strokeWeight(1);
-            overlay.noFill();
-            overlay.circle(mouse.x, mouse.y, 20);
-            overlay.circle(mouse.x, mouse.y, 10);
-            p.noCursor();
+            drawMouseTarget(overlay, mouse, p);
         }
-        const posseGraphics = posse?.p;
-        if (posseGraphics)
+        const posseGraphics = SketchStore.mainGraphic;
+        if (posseGraphics) {
             p.image(posseGraphics, 0, 0);
-        if (overlay)
-            p.image(overlay, 0, 0, WIDTH, HEIGHT);
+        }
+        if (overlay) {
+            p.image(overlay, 0, 0);
+        }
+        if (SketchStore.debugOn && debugOverlay) {
+            p.image(debugOverlay, 0, 0);
+        }
     };
 
     p.keyPressed = () => {
@@ -69,3 +84,11 @@ export const buddiesSketch = (p: p5) => {
         }
     };
 };
+function drawMouseTarget(overlay: p5.Graphics, mouse: p5.Vector, p: p5) {
+    overlay.stroke(0, 0, 100, 0.8);
+    overlay.strokeWeight(1);
+    overlay.noFill();
+    overlay.circle(mouse.x, mouse.y, 20);
+    overlay.circle(mouse.x, mouse.y, 10);
+    p.noCursor();
+}
