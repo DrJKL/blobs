@@ -12,6 +12,7 @@ export const buddiesSketch = (p: p5) => {
     const HEIGHT = 600;
     p.setup = () => {
         p.createCanvas(WIDTH, HEIGHT);
+        p.frameRate(144);
         mainGraphics = p.createGraphics(WIDTH, HEIGHT);
         mainGraphics.colorMode(p.HSB, 360, 100, 100, 1);
         overlay = p.createGraphics(WIDTH, HEIGHT);
