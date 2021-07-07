@@ -15,6 +15,7 @@ export const buddiesSketch = (p: p5) => {
     p.setup = () => {
         p.createCanvas(WIDTH, HEIGHT);
         p.frameRate(144);
+        p.noCursor();
         SketchStore.initP(p);
 
         mainGraphics = p.createGraphics(WIDTH, HEIGHT);
@@ -52,8 +53,8 @@ export const buddiesSketch = (p: p5) => {
         debugOverlay?.clear();
         overlay?.clear();
         posse?.doTheThing();
-        if (overlay && p.mouseIsPressed) {
-            drawMouseTarget(overlay, mouse, p);
+        if (overlay) {
+            drawMouseTarget(overlay, mouse);
         }
         const posseGraphics = SketchStore.mainGraphic;
         if (posseGraphics) {
@@ -73,7 +74,9 @@ export const buddiesSketch = (p: p5) => {
         }
     };
 
-    p.mouseClicked = () => {
+    p.mousePressed = (event: MouseEvent) => {
+        console.log(event);
+        event.preventDefault();
         if (
             p.mouseX > 0 &&
             p.mouseX < p.width &&
@@ -82,13 +85,13 @@ export const buddiesSketch = (p: p5) => {
         ) {
             posse?.addNewBuddy(p.createVector(p.mouseX, p.mouseY));
         }
+        return false;
     };
 };
-function drawMouseTarget(overlay: p5.Graphics, mouse: p5.Vector, p: p5) {
+function drawMouseTarget(overlay: p5.Graphics, mouse: p5.Vector) {
     overlay.stroke(0, 0, 100, 0.8);
     overlay.strokeWeight(1);
     overlay.noFill();
     overlay.circle(mouse.x, mouse.y, 20);
     overlay.circle(mouse.x, mouse.y, 10);
-    p.noCursor();
 }

@@ -5,6 +5,7 @@
       ref="p5Container"
       class="col buddies-plate"
       @selectstart="doNothing($event)"
+      @contextmenu="doNothing($event)"
     ></div>
 
     <div class="col column">
@@ -39,7 +40,7 @@ export default class ComponentName extends Vue {
     this.p5Handle?.noLoop();
   }
 
-  doNothing(event: MouseEvent) {
+  doNothing(event: Event) {
     event.preventDefault();
     // DO NOTHING
   }
