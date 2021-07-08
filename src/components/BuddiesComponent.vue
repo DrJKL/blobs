@@ -40,8 +40,8 @@ export default class ComponentName extends Vue {
     this.p5Handle?.noLoop();
   }
 
-  doNothing(event: Event) {
-    event.preventDefault();
+  doNothing(event: MouseEvent) {
+    if (!event.shiftKey) event.preventDefault();
     // DO NOTHING
   }
 }
