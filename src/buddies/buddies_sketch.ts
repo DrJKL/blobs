@@ -75,7 +75,6 @@ export const buddiesSketch = (p: p5) => {
     };
 
     p.mousePressed = (event: MouseEvent) => {
-        console.log(event);
         event.preventDefault();
         if (
             p.mouseX > 0 &&
