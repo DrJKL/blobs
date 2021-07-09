@@ -30,8 +30,12 @@ function ogColors(p: p5) {
         p.color(231, 41.8, 91, 0.07),
     ];
 }
+interface Renderable {
+    render(): void;
+    renderDebug(): void;
+}
 
-export class Segment {
+export class Segment implements Renderable {
     constructor(
         readonly p: p5,
         public position: Vector,
@@ -41,9 +45,40 @@ export class Segment {
     }
 
     render() {
+        this.p.push();
         this.p.noStroke();
         this.p.fill(this.color);
-        this.p.circle(this.position.x, this.position.y, this.position.z);
+        this.p.translate(this.position.x, this.position.y);
+        this.p.circle(0, 0, this.position.z);
+        this.p.pop();
+    }
+
+    renderDebug() {
+        const debugLayer = SketchStore.debugGraphic;
+        const sketch = SketchStore.mainSketch;
+        if (!debugLayer || !sketch || !SketchStore.debugOn) return;
+        debugLayer.push();
+
+        const px = this.position.x;
+        const py = this.position.y;
+
+
+        const mx = sketch.mouseX - px;
+        const my = sketch.mouseY - py;
+
+        debugLayer.stroke(0, 0, 100, 1);
+        debugLayer.strokeWeight(1);
+        debugLayer.noFill();
+
+        const directAngle = sketch.atan2(my, mx) - sketch.atan2(py, px);
+
+        debugLayer.translate(px, py);
+        debugLayer.rotate(directAngle);
+
+        debugLayer.line(0, 0, 30, 30);
+
+        debugLayer.pop();
+        // Nothing yet.
     }
 
     copy(velocity: Vector, size: number, color: Color) {
@@ -53,11 +88,9 @@ export class Segment {
     }
 }
 
-export class Egg {
+export class Egg { }
 
-}
-
-export class Buddy {
+export class Buddy implements Renderable {
     age = 0;
     alive = true;
     velocity = Vector.random2D();
@@ -66,7 +99,7 @@ export class Buddy {
     get maxSpeed() {
         return this.size / 4;
     }
-    maxLength = 20;
+    maxLength = 50;
     body: Segment[];
     colors: Color[];
     secondaryColor: Color;
@@ -97,25 +130,30 @@ export class Buddy {
         this.age++;
         if (this.age > BuddyStore.ageLimit) {
             this.alive = false;
-            console.log('💀');
         }
 
         this.move(buddies);
-        this.renderBody();
+        this.render();
         this.renderDebug();
     }
 
-    renderBody() {
+    render() {
         this.p.noStroke();
-        for (const pos of this.body) {
+        for (let i = 0; i < this.body.length - 1; i++) {
+            const pos = this.body[i];
+            // const next = this.body[i + 1];
             pos.render();
+            if (i % 5 === 0) pos.renderDebug();
             pos.position.z *= 0.99;
+
         }
         this.drawForce(this.velocity, this.position);
     }
     renderDebug() {
         const d = SketchStore.debugGraphic;
-        if (!d || !SketchStore.isDebug) { return; }
+        if (!d || !SketchStore.isDebug) {
+            return;
+        }
         d.fill(0, 0, 100, 1);
         d.textSize(32);
         d.text(`${this.age}`, this.position.x, this.position.y - 20);
