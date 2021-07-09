@@ -27,6 +27,7 @@ export class SketchStoreModule extends VuexModule {
   public overlayGraphic: Graphics | null = null;
   public debugGraphic: Graphics | null = null;
   public debugOn = false;
+  public frameRate = 144;
 
   @Mutation
   public initP(newP: p5) {
@@ -47,6 +48,12 @@ export class SketchStoreModule extends VuexModule {
   @Mutation
   public setDebug(debug: boolean) {
     this.debugOn = debug;
+  }
+
+  @Mutation
+  public setFrameRate(frameRate: number) {
+    this.frameRate = frameRate;
+    this.mainSketch?.frameRate(frameRate);
   }
 
   get isDebug() {

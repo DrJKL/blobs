@@ -1,3 +1,4 @@
+import { Segment } from './buddy';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Buddy } from './buddy';
 import p5, { Vector } from 'p5';
@@ -57,7 +58,8 @@ export class AvoidOtherBuddiesDrive implements Drive {
             if (buddy === other) {
                 continue;
             }
-            for (const segment of other.body) {
+            for (let i = 0; i < other.body.length; i += 4) {
+                const segment = other.body[i];
                 forces.push(this.repel(p, segment.position, buddy.position));
             }
         }

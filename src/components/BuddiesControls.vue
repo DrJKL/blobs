@@ -6,7 +6,7 @@
           <q-slider
             v-model="maxBuddies"
             class="col self-center buddies-slider"
-            color="red"
+            color="green"
             :step="1"
             :min="0"
             :max="50"
@@ -34,6 +34,23 @@
         </template>
       </q-field>
     </div>
+    <div class="column col justify-evenly">
+      <q-field filled :hint="`FrameRate ${frameRate}`">
+        <template #control>
+          <q-slider
+            v-model="frameRate"
+            class="col self-center buddies-slider"
+            color="blue"
+            :step="1"
+            :min="0"
+            :max="144"
+            label
+            dark
+            @wheel="frameRateScroll"
+          />
+        </template>
+      </q-field>
+    </div>
     <q-toggle v-model="debug">Debug</q-toggle>
   </div>
 </template>
@@ -57,6 +74,12 @@ export default class BuddiesControls extends Vue {
   }
   set maxBuddies(newValue: number) {
     GameStore.setMaxBuddies(newValue);
+  }
+  get frameRate() {
+    return SketchStore.frameRate;
+  }
+  set frameRate(newValue: number) {
+    SketchStore.setFrameRate(newValue);
   }
 
   get debug() {
