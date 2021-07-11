@@ -99,7 +99,7 @@ export class Buddy implements Renderable {
     get maxSpeed() {
         return this.size / 4;
     }
-    maxLength = 50;
+    maxLength = 20;
     body: Queue<Segment>;
     colors: Color[];
     secondaryColor: Color;
