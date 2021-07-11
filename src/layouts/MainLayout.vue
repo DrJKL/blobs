@@ -38,8 +38,11 @@
           Menu
         </q-item-label>
 
-        <q-item>Nothing to see here...</q-item>
-
+        <q-item
+          ><q-btn type="a" target="_blank" href="http://github.com/drjkl/blobs"
+            >Nothing to see here...</q-btn
+          ></q-item
+        >
       </q-list>
     </q-drawer>
 
@@ -56,11 +59,10 @@
 </template>
 
 <script lang="ts">
-
 import { Vue, Options } from 'vue-class-component';
 
 @Options({
-  components: {  },
+  components: {},
 })
 export default class MainLayout extends Vue {
   leftDrawerOpen = false;
