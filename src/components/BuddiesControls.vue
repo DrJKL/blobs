@@ -52,7 +52,7 @@
       </q-field>
     </div>
     <q-btn-group>
-    <q-toggle v-model="debug" label="Debug" />
+    <q-toggle v-model="debug" title="Debug" icon="fa fa-bug fa-stack-1x"/>
       <q-btn
         :title="playButtonText"
         :icon="playButtonIcon"
