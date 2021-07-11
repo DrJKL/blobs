@@ -92,6 +92,13 @@ export class SketchStoreModule extends VuexModule {
     return this.mainSketch?.isLooping() || false;
   }
 
+  @Mutation
+  public clearScreen() {
+    // this.mainSketch?.clear();
+    this.mainGraphic?.clear();
+    this.mainGraphic?.background(0);
+  }
+
   get isDebug() {
     return this.debugOn;
   }

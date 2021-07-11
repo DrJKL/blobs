@@ -10,6 +10,7 @@
             :step="1"
             :min="0"
             :max="50"
+            snap
             label
             dark
             @wheel="maxBuddiesScroll"
@@ -27,6 +28,7 @@
             :step="1"
             :min="0"
             :max="10"
+            snap
             label
             dark
             @wheel="fogValueScroll"
@@ -44,6 +46,7 @@
             :step="1"
             :min="0"
             :max="144"
+            snap
             label
             dark
             @wheel="frameRateScroll"
@@ -68,6 +71,12 @@
         color="accent"
         @click="clickStepForward"
       />
+      <q-btn
+      title="Clear Screen"
+      icon="fa fa-trash-alt"
+      push
+      color="accent"
+      @click="clearScreen"/>
     </q-btn-group>
   </div>
 </template>
@@ -115,6 +124,9 @@ export default class BuddiesControls extends Vue {
   }
   clickStepForward() {
     SketchStore.step();
+  }
+  clearScreen() {
+    SketchStore.clearScreen();
   }
 
   get playButtonIcon() {
