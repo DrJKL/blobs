@@ -35,22 +35,11 @@
             aria-label="Menu"
             @click="toggleLeftDrawer"
           />
-          Essential Links
+          Menu
         </q-item-label>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-        <EssentialLink
-          v-bind="{
-            title: 'This is a link',
-            caption: 'but not really',
-            icon: 'fa fa-dice-d20',
-            link: 'javascript:;',
-          }"
-        />
+        <q-item>Nothing to see here...</q-item>
+
       </q-list>
     </q-drawer>
 
@@ -67,37 +56,14 @@
 </template>
 
 <script lang="ts">
-import EssentialLink from 'components/EssentialLink.vue';
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  },
-];
 
 import { Vue, Options } from 'vue-class-component';
 
 @Options({
-  components: { EssentialLink },
+  components: {  },
 })
 export default class MainLayout extends Vue {
   leftDrawerOpen = false;
-  essentialLinks = linksList;
   toggleLeftDrawer() {
     this.leftDrawerOpen = !this.leftDrawerOpen;
   }
