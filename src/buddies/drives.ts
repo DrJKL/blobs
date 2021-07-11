@@ -74,7 +74,9 @@ export class AvoidOtherBuddiesDrive implements Drive {
         const force = (-1 * 100) / (d * d);
 
         dir.normalize();
-        dir.mult(force);
+        if (force && !isNaN(force) && isFinite(force)) {
+            dir.mult(force);
+        }
         return dir;
     }
 }
