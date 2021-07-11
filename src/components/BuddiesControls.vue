@@ -51,7 +51,24 @@
         </template>
       </q-field>
     </div>
-    <q-toggle v-model="debug">Debug</q-toggle>
+    <q-btn-group>
+    <q-toggle v-model="debug" label="Debug" />
+      <q-btn
+        :title="playButtonText"
+        :icon="playButtonIcon"
+        push
+        color="accent"
+        @click="clickPlayPause"
+      />
+      <q-btn
+        title="Step Forward"
+        icon="fa fa-step-forward"
+        :disable="playing"
+        push
+        color="accent"
+        @click="clickStepForward"
+      />
+    </q-btn-group>
   </div>
 </template>
 <script lang="ts">
@@ -89,11 +106,32 @@ export default class BuddiesControls extends Vue {
     SketchStore.setDebug(newDebug);
   }
 
+  get playing() {
+    return SketchStore.playing;
+  }
+
+  clickPlayPause() {
+    SketchStore.togglePlayState();
+  }
+  clickStepForward() {
+    SketchStore.step();
+  }
+
+  get playButtonIcon() {
+    return `fa fa-${SketchStore.playing ? 'pause' : 'play'}`;
+  }
+  get playButtonText() {
+    return SketchStore.playing ? 'Pause' : 'Play';
+  }
+
   maxBuddiesScroll(event: WheelEvent) {
     this.maxBuddies = this.maxBuddies - Math.sign(event.deltaY);
   }
   fogValueScroll(event: WheelEvent) {
     this.fogValue = this.fogValue - Math.sign(event.deltaY);
+  }
+  frameRateScroll(event: WheelEvent) {
+    this.frameRate = this.frameRate - Math.sign(event.deltaY);
   }
 }
 </script>
@@ -102,6 +140,6 @@ export default class BuddiesControls extends Vue {
   min-height: 10em;
 }
 .game-controls {
-  flex:1;
+  flex: 1;
 }
 </style>
