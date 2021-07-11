@@ -55,7 +55,7 @@
       </q-field>
     </div>
     <q-btn-group>
-    <q-toggle v-model="debug" title="Debug" icon="fa fa-bug fa-stack-1x"/>
+      <q-toggle v-model="debug" title="Debug" icon="fa fa-bug fa-stack-1x" />
       <q-btn
         :title="playButtonText"
         :icon="playButtonIcon"
@@ -72,11 +72,12 @@
         @click="clickStepForward"
       />
       <q-btn
-      title="Clear Screen"
-      icon="fa fa-trash-alt"
-      push
-      color="accent"
-      @click="clearScreen"/>
+        title="Clear Screen"
+        icon="fa fa-trash-alt"
+        push
+        color="accent"
+        @click="clearScreen"
+      />
     </q-btn-group>
   </div>
 </template>
