@@ -56,8 +56,9 @@ export class AvoidOtherBuddiesDrive implements Drive {
             if (buddy === other) {
                 continue;
             }
-            for (let i = 0; i < other.body.length; i += 4) {
-                const segment = other.body[i];
+            const otherBody = other.body.entries();
+            for (let i = 0; i < otherBody.length; i += 4) {
+                const segment = otherBody[i];
                 forces.push(this.repel(p, segment.position, buddy.position));
             }
         }

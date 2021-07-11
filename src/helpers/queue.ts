@@ -22,12 +22,21 @@ export default class Queue<T> {
         return item;
     }
 
-    peek() {
+    peek(): T | undefined {
+        if (this.isEmpty()) {
+            return undefined;
+        }
         return this.data[this.head];
     }
 
+    peekTail(): T | undefined {
+        if (this.isEmpty()) {
+            return undefined;
+        }
+        return this.data[this.tail - 1];
+    }
+
     size() {
-        console.log({ size: this.tail - this.head });
         return this.tail - this.head;
     }
 

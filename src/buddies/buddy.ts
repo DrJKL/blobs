@@ -8,6 +8,7 @@ import {
 import p5, { Vector, Color } from 'p5';
 import { analogous } from 'src/helpers/color_utils';
 import BuddyStore from '../store/buddy_store';
+import Queue from 'src/helpers/queue';
 
 function randomColor(p: p5): Color {
     return p.color(p.random(360), p.random(40, 100), p.random(80, 100));
@@ -62,7 +63,6 @@ export class Segment implements Renderable {
         const px = this.position.x;
         const py = this.position.y;
 
-
         const mx = sketch.mouseX - px;
         const my = sketch.mouseY - py;
 
@@ -100,7 +100,7 @@ export class Buddy implements Renderable {
         return this.size / 4;
     }
     maxLength = 50;
-    body: Segment[];
+    body: Queue<Segment>;
     colors: Color[];
     secondaryColor: Color;
 
@@ -116,11 +116,12 @@ export class Buddy implements Renderable {
         this.secondaryColor.setAlpha(0.2);
 
         pos.z = this.velocity.mag();
-        this.body = [new Segment(p, pos.copy(), this.colors[0])];
+        this.body = new Queue<Segment>();
+        this.body.enqueue(new Segment(p, pos.copy(), this.colors[0]));
     }
 
     get position() {
-        return this.body[0].position;
+        return this.body.peekTail()?.position ?? new Vector();
     }
 
     draw(buddies: Buddy[]) {
@@ -139,13 +140,13 @@ export class Buddy implements Renderable {
 
     render() {
         this.p.noStroke();
-        for (let i = 0; i < this.body.length - 1; i++) {
-            const pos = this.body[i];
+        const bodySegs = this.body.entries();
+        for (let i = 0; i < bodySegs.length - 1; i++) {
+            const pos = bodySegs[i];
             // const next = this.body[i + 1];
             pos.render();
             if (i % 5 === 0) pos.renderDebug();
             pos.position.z *= 0.99;
-
         }
         this.drawForce(this.velocity, this.position);
     }
@@ -187,17 +188,21 @@ export class Buddy implements Renderable {
     changeVelocity() {
         this.velocity.add(this.acceleration).limit(this.maxSpeed);
 
-        while (this.body.length >= this.maxLength) {
-            this.body.pop();
+        while (this.body.size() >= this.maxLength) {
+            this.body.dequeue();
+        }
+        const head = this.body.peekTail();
+        if (!head) {
+            return;
         }
         const segColorIndex = Math.floor(this.age / 10) % this.colors.length;
         const segColor = this.colors[segColorIndex];
-        const newSegment = this.body[0].copy(
+        const newSegment = head.copy(
             this.velocity,
             (this.size * 2) / this.p.max(this.velocity.mag(), 1),
             segColor
         );
-        this.body.unshift(newSegment);
+        this.body.enqueue(newSegment);
         this.acceleration.mult(0);
     }
 
