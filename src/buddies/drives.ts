@@ -1,10 +1,8 @@
-import { Segment } from './buddy';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Buddy } from './buddy';
 import p5, { Vector } from 'p5';
 
 export interface Drive {
-    // new(p: p5, goals: Vector[]): Drive;
     getGoals(p: p5, buddy: Buddy, buddies: Buddy[]): Vector[];
     getForces(p: p5, buddy: Buddy, buddies: Buddy[]): Vector[];
 }
@@ -24,21 +22,21 @@ export class XDrive implements Drive {
 export class AvoidBordersDrive implements Drive {
     getGoals(p: p5, buddy: Buddy, _buddies: Buddy[]) {
         const position = buddy.position;
-        const offset = 0;
         if (!position) {
             return [];
         }
         const goals: Vector[] = [];
-        if (position.x < 25) {
+        const offset = 25;
+        if (position.x < offset) {
             goals.push(p.createVector(buddy.maxSpeed, buddy.velocity.y));
         }
-        if (position.x > p.width - 25) {
+        if (position.x > p.width - offset) {
             goals.push(p.createVector(-buddy.maxSpeed, buddy.velocity.y));
         }
-        if (position.y < 25) {
+        if (position.y < offset) {
             goals.push(p.createVector(buddy.velocity.x, buddy.maxSpeed));
         }
-        if (position.y > p.height - 25) {
+        if (position.y > p.height - offset) {
             goals.push(p.createVector(buddy.velocity.x, -buddy.maxSpeed));
         }
         return goals;
