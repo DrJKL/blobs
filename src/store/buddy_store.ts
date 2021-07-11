@@ -20,7 +20,7 @@ if (storeInstance.hasModule(name)) {
 })
 export class BuddyStoreModule extends VuexModule {
   // state
-  public ageLimit = 3000;
+  public ageLimit = 300;
   public colorRange = [0, 90];
 
   @Mutation
