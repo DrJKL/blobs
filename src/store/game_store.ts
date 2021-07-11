@@ -7,7 +7,7 @@ import {
     Action,
     getModule,
 } from 'vuex-module-decorators';
-import { storeInstance } from '..';
+import { storeInstance } from '.';
 
 const name = 'gamestore';
 
