@@ -1,9 +1,9 @@
 import p5, { Graphics } from 'p5';
-import { Action } from 'vuex-class';
 import {
   VuexModule,
   Module,
   Mutation,
+  Action,
   getModule,
 } from 'vuex-module-decorators';
 import { storeInstance } from './index';
@@ -19,6 +19,7 @@ if (storeInstance.hasModule(name)) {
   store: storeInstance,
   dynamic: true,
   namespaced: true,
+  stateFactory: true,
 })
 export class SketchStoreModule extends VuexModule {
   // state
@@ -56,6 +57,41 @@ export class SketchStoreModule extends VuexModule {
     this.mainSketch?.frameRate(frameRate);
   }
 
+  @Mutation
+  public play() {
+    this.mainSketch?.loop();
+  }
+  @Mutation
+  public pause() {
+    this.mainSketch?.noLoop();
+  }
+
+  @Action
+  public togglePlayState() {
+    if (this.playing) {
+      this.pause();
+    } else {
+      this.play();
+    }
+  }
+
+  @Action
+  public setLoopState(toLoop: boolean) {
+    if (toLoop) {
+      this.play();
+    } else {
+      this.pause();
+    }
+  }
+  @Mutation
+  public step() {
+    this.mainSketch?.redraw();
+  }
+
+  get playing() {
+    return this.mainSketch?.isLooping() || false;
+  }
+
   get isDebug() {
     return this.debugOn;
   }
@@ -67,10 +103,3 @@ export class SketchStoreModule extends VuexModule {
 }
 
 export default getModule(SketchStoreModule);
-
-storeInstance.watch(
-  () => getModule(SketchStoreModule, storeInstance).isDebug,
-  (newV: boolean, old: boolean) => {
-    console.log('debug changed', old, newV);
-  }
-);
