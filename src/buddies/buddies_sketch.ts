@@ -74,6 +74,7 @@ export const buddiesSketch = (p: p5) => {
         }
     };
 
+    // Click
     p.mousePressed = (event: MouseEvent) => {
         event.preventDefault();
         if (
@@ -82,7 +83,7 @@ export const buddiesSketch = (p: p5) => {
             p.mouseY > 0 &&
             p.mouseY < p.height
         ) {
-            posse?.addNewBuddy(p.createVector(p.mouseX, p.mouseY));
+            posse?.layEgg(p.createVector(p.mouseX, p.mouseY));
         }
         return false;
     };

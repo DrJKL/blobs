@@ -88,7 +88,68 @@ export class Segment implements Renderable {
     }
 }
 
-export class Egg { }
+export class Egg implements Renderable {
+    age = 0;
+    hatchAge = 500;
+    expirationAge = 1000;
+
+    constructor(
+        readonly p: p5,
+        readonly position: Vector,
+        readonly colors: Color[] = analogous(p, randomColor(p))
+    ) { }
+
+    draw() {
+        this.age++;
+        this.render();
+        this.renderDebug();
+    }
+
+    render() {
+        const p = SketchStore.mainGraphic;
+        if (!p) {
+            return;
+        }
+        p.push();
+        p.fill(this.colors[this.age % this.colors.length]);
+        p.ellipse(this.position.x, this.position.y, this.size);
+        p.pop();
+    }
+
+    renderDebug() {
+        const d = SketchStore.debugGraphic;
+        if (!d || !SketchStore.isDebug) {
+            return;
+        }
+        d.fill(0, 0, 100, 1);
+        d.textSize(32);
+        d.text(this.debugText, this.position.x, this.position.y - 20);
+    }
+
+    private get debugText() {
+        return this.expired
+            ? `<${this.age}>`
+            : this.ready
+                ? `(${this.age})`
+                : `[${this.age}]`;
+    }
+
+    private get size() {
+        return 10 * Math.pow(Math.min(this.age, this.hatchAge), 0.3);
+    }
+
+    get ready() {
+        return this.age >= this.hatchAge;
+    }
+
+    get expired() {
+        return this.age >= this.expirationAge;
+    }
+
+    hatch(p: p5) {
+        return new Buddy(p, this.position, this.colors);
+    }
+}
 
 export class Buddy implements Renderable {
     age = 0;
@@ -99,7 +160,7 @@ export class Buddy implements Renderable {
     get maxSpeed() {
         return this.size / 4;
     }
-    maxLength = 20;
+    maxLength = 100;
     body: Queue<Segment>;
     colors: Color[];
     secondaryColor: Color;
@@ -110,8 +171,8 @@ export class Buddy implements Renderable {
     stomachCapacity = 3;
     calories = 100;
 
-    constructor(readonly p: p5, pos: Vector) {
-        this.colors = analogous(p, randomColor(p));
+    constructor(readonly p: p5, pos: Vector, colors?: Color[]) {
+        this.colors = colors || analogous(p, randomColor(p));
         this.secondaryColor = randomColor(p);
         this.secondaryColor.setAlpha(0.2);
 
@@ -124,10 +185,11 @@ export class Buddy implements Renderable {
         return this.body.peekTail()?.position ?? new Vector();
     }
 
+    get allDone() {
+        return this.body.size() === 1;
+    }
+
     draw(buddies: Buddy[]) {
-        if (!this.alive) {
-            return;
-        }
         this.age++;
         if (this.age > BuddyStore.ageLimit) {
             this.alive = false;
@@ -145,10 +207,12 @@ export class Buddy implements Renderable {
             const pos = bodySegs[i];
             // const next = this.body[i + 1];
             pos.render();
-            if (i % 5 === 0) pos.renderDebug();
+            // if (i % 5 === 0) pos.renderDebug();
             pos.position.z *= 0.99;
         }
+        if (this.alive) {
         this.drawForce(this.velocity, this.position);
+    }
     }
     renderDebug() {
         const d = SketchStore.debugGraphic;
@@ -188,6 +252,14 @@ export class Buddy implements Renderable {
     changeVelocity() {
         this.velocity.add(this.acceleration).limit(this.maxSpeed);
 
+        if (!this.alive) {
+            const toPrune = this.body.size() / 10;
+            for (let i = 0; i < toPrune; i++) {
+                this.body.dequeue();
+            }
+            return;
+        }
+
         while (this.body.size() >= this.maxLength) {
             this.body.dequeue();
         }
@@ -210,5 +282,9 @@ export class Buddy implements Renderable {
         desired.sub(this.velocity);
         desired.limit(3);
         this.applyForce(desired);
+    }
+
+    toEgg() {
+        return new Egg(this.p, this.position, this.colors);
     }
 }
