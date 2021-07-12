@@ -149,7 +149,7 @@ export class Egg implements Renderable {
     }
     private get width() {
         return (
-            this.size +
+            (this.size * 0.8) +
             (this.almostReady ? this.p.sin(((this.age + 50) / 100) * this.p.TWO_PI) * 5 : 0)
         );
     }
