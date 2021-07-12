@@ -6,7 +6,7 @@ import {
     MoveRandomly,
 } from './drives';
 import p5, { Vector, Color } from 'p5';
-import { analogous } from 'src/helpers/color_utils';
+import { analogous, complement } from 'src/helpers/color_utils';
 import BuddyStore from '../store/buddy_store';
 import Queue from 'src/helpers/queue';
 
@@ -92,12 +92,16 @@ export class Egg implements Renderable {
     age = 0;
     hatchAge = 500;
     expirationAge = 1000;
+    outline: Color;
 
     constructor(
         readonly p: p5,
         readonly position: Vector,
-        readonly colors: Color[] = analogous(p, randomColor(p))
-    ) { }
+        readonly color: Color = randomColor(p),
+        readonly generation = 1
+    ) {
+        this.outline = complement(p, color)[1];
+    }
 
     draw() {
         this.age++;
@@ -111,8 +115,9 @@ export class Egg implements Renderable {
             return;
         }
         p.push();
-        p.fill(this.colors[this.age % this.colors.length]);
-        p.ellipse(this.position.x, this.position.y, this.size);
+        p.fill(this.color);
+        p.stroke(this.outline);
+        p.ellipse(this.position.x, this.position.y, this.width, this.height);
         p.pop();
     }
 
@@ -135,7 +140,28 @@ export class Egg implements Renderable {
     }
 
     private get size() {
-        return 10 * Math.pow(Math.min(this.age, this.hatchAge), 0.3);
+        const base = this.expired
+            ? 10
+            : this.ready
+                ? this.expirationAge - this.age
+                : this.age;
+        return 10 * Math.pow(base, 0.3);
+    }
+    private get width() {
+        return (
+            this.size +
+            (this.almostReady ? this.p.sin(((this.age + 50) / 100) * this.p.TWO_PI) * 5 : 0)
+        );
+    }
+    private get height() {
+        return (
+            this.size +
+            (this.almostReady ? this.p.sin((this.age / 100) * this.p.TWO_PI) * 5 : 0)
+        );
+    }
+
+    get almostReady() {
+        return Math.abs(this.hatchAge - this.age) < 200;
     }
 
     get ready() {
@@ -147,7 +173,7 @@ export class Egg implements Renderable {
     }
 
     hatch(p: p5) {
-        return new Buddy(p, this.position, this.colors);
+        return new Buddy(p, this.position, analogous(this.p, this.color));
     }
 }
 
@@ -162,7 +188,6 @@ export class Buddy implements Renderable {
     }
     maxLength = 100;
     body: Queue<Segment>;
-    colors: Color[];
     secondaryColor: Color;
 
     drives: Drive[] = defaultDrives();
@@ -171,8 +196,12 @@ export class Buddy implements Renderable {
     stomachCapacity = 3;
     calories = 100;
 
-    constructor(readonly p: p5, pos: Vector, colors?: Color[]) {
-        this.colors = colors || analogous(p, randomColor(p));
+    constructor(
+        readonly p: p5,
+        pos: Vector,
+        readonly colors: Color[] = analogous(p, randomColor(p)),
+        readonly generation = 1
+    ) {
         this.secondaryColor = randomColor(p);
         this.secondaryColor.setAlpha(0.2);
 
@@ -211,7 +240,7 @@ export class Buddy implements Renderable {
             pos.position.z *= 0.99;
         }
         if (this.alive) {
-        this.drawForce(this.velocity, this.position);
+            this.drawForce(this.velocity, this.position);
     }
     }
     renderDebug() {
@@ -285,6 +314,11 @@ export class Buddy implements Renderable {
     }
 
     toEgg() {
-        return new Egg(this.p, this.position, this.colors);
+        return new Egg(
+            this.p,
+            this.position,
+            this.colors[this.p.random(this.colors.length)],
+            this.generation + 1
+        );
     }
 }
