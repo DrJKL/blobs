@@ -3,6 +3,7 @@ import { Buddy, Egg } from './buddy';
 
 import GameStore from 'src/store/game_store';
 import SketchStore from 'src/store/sketch_store';
+import { partition } from 'src/helpers/partition';
 
 export class Posse {
     buddies: Buddy[] = [];
@@ -71,20 +72,8 @@ export class Posse {
         const [living, dead] = partition(this.buddies, (buddy) => !buddy.allDone);
         this.buddies = living;
         this.eggs = [...this.eggs, ...dead.map((b) => b.toEgg())];
-        this.clearSomeOfTheBuddies();
+        // this.clearSomeOfTheBuddies();
         this.makeAllTheBuddies();
     }
 }
 
-function partition<T>(arr: T[], predicate: (i: T) => boolean): [T[], T[]] {
-    const pass: T[] = [];
-    const fail: T[] = [];
-    arr.forEach((value) => {
-        if (predicate(value)) {
-            pass.push(value);
-        } else {
-            fail.push(value);
-        }
-    });
-    return [pass, fail];
-}
