@@ -29,6 +29,7 @@ export class PosseStoreModule extends VuexModule {
         this.buddies.push(buddy);
     }
 
+    @Mutation
     public addEgg(egg: Egg) {
         this.eggs.push(egg);
     }
