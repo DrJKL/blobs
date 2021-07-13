@@ -1,3 +1,4 @@
+import PosseStore from './../store/posse_store';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Buddy } from './buddy';
 import p5, { Vector } from 'p5';
@@ -59,26 +60,24 @@ export class AvoidOtherBuddiesDrive implements Drive {
             const otherBody = other.body.entries();
             for (let i = 0; i < otherBody.length; i += 4) {
                 const segment = otherBody[i];
-                forces.push(this.repel(p, segment.position, buddy.position));
-            }
+              forces.push(repel(p, segment.position, buddy.position));
+          }
+      }
+      return forces;
+  }
+}
+
+export class AvoidEggsDrive implements Drive {
+    getGoals(_p: p5, _buddy: Buddy, _buddies: Buddy[]) {
+        return [];
+    }
+    getForces(p: p5, buddy: Buddy, buddies: Buddy[]) {
+        const forces = [];
+        const eggs = PosseStore.eggs;
+        for (const other of eggs) {
+            forces.push(repel(p, other.position, buddy.position));
         }
         return forces;
-    }
-
-    repel(p: p5, buddy: Vector, otherBuddy: Vector) {
-        const dir = Vector.sub(buddy, otherBuddy);
-
-        const d = dir.mag();
-        if (d > 500) {
-            return p.createVector();
-        }
-        const force = (-1 * 100) / (d * d);
-
-        dir.normalize();
-        if (force && !isNaN(force) && isFinite(force)) {
-            dir.mult(force);
-        }
-        return dir;
     }
 }
 
@@ -98,4 +97,20 @@ export class MoveRandomly implements Drive {
         // }
         return forces;
     }
+}
+
+function repel(p: p5, buddy: Vector, otherBuddy: Vector) {
+    const dir = Vector.sub(buddy, otherBuddy);
+
+    const d = dir.mag();
+    if (d > 500) {
+        return p.createVector();
+    }
+    const force = (-1 * 100) / (d * d);
+
+    dir.normalize();
+    if (force && !isNaN(force) && isFinite(force)) {
+        dir.mult(force);
+    }
+    return dir;
 }
