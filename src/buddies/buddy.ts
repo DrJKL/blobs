@@ -150,18 +150,22 @@ export class Egg implements Renderable {
     private get width() {
         return (
             (this.size * 0.8) +
-            (this.almostReady ? this.p.sin(((this.age + 50) / 100) * this.p.TWO_PI) * 5 : 0)
+            (this.almostReady ? this.p.sin(((this.age + 50) / 100) * (50 / this.timeUntilReady) * this.p.TWO_PI) * 5 : 0)
         );
     }
     private get height() {
         return (
             this.size +
-            (this.almostReady ? this.p.sin((this.age / 100) * this.p.TWO_PI) * 5 : 0)
+            (this.almostReady ? this.p.sin((this.age / 100) * (100 / this.timeUntilReady) * this.p.TWO_PI) * 4 : 0)
         );
     }
 
-    get almostReady() {
-        return Math.abs(this.hatchAge - this.age) < 200;
+    private get almostReady() {
+        return this.timeUntilReady < 200;
+    }
+
+    private get timeUntilReady() {
+        return Math.abs(this.hatchAge - this.age);
     }
 
     get ready() {
