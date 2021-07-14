@@ -1,6 +1,5 @@
-import PosseStore from './../store/posse_store';
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Buddy } from './buddy';
+import { Buddy, Egg } from './buddy';
 import p5, { Vector } from 'p5';
 
 export interface Drive {
@@ -73,7 +72,7 @@ export class AvoidEggsDrive implements Drive {
     }
     getForces(p: p5, buddy: Buddy, buddies: Buddy[]) {
         const forces = [];
-        const eggs = PosseStore.eggs;
+        const eggs: Egg[] = [];
         for (const other of eggs) {
             forces.push(repel(p, other.position, buddy.position));
         }
