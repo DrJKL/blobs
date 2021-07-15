@@ -130,9 +130,12 @@ export class Egg implements Renderable {
     if (!d || !SketchStore.isDebug) {
       return;
     }
+    d.push();
     d.fill(0, 0, 100, 1);
     d.textSize(32);
-    d.text(this.debugText, this.position.x, this.position.y - 20);
+    d.textAlign(d.CENTER, d.BASELINE);
+    d.text(this.debugText, this.position.x, this.position.y - 32);
+    d.pop();
   }
 
   private alphaColor(color: Color) {
@@ -282,13 +285,15 @@ export class Buddy implements Renderable {
     if (!d || !SketchStore.isDebug) {
       return;
     }
+    d.push();
     d.fill(0, 0, 100, 1);
     d.textSize(32);
-    d.text(
-      `${this.age} - ${this.generation}`,
-      this.position.x,
-      this.position.y - 20
-    );
+    d.textAlign(d.CENTER);
+    d.text(this.debugText, this.position.x, this.position.y - 20);
+    d.pop();
+  }
+  private get debugText() {
+    return `${this.age} - ${this.generation}`;
   }
 
   move(buddies: Buddy[]) {
