@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row items-center justify-evenly ummmm">
+  <q-page class="row items-center justify-around ummmm">
     <game-canvas></game-canvas>
   </q-page>
 </template>

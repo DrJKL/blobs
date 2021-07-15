@@ -4,6 +4,7 @@ import { Buddy, Egg } from './buddy';
 import GameStore from 'src/store/game_store';
 import SketchStore from 'src/store/sketch_store';
 import { partition } from 'src/helpers/partition';
+import StatsStore from 'src/store/stats_store';
 
 export class Posse {
   buddies: Buddy[] = [];
@@ -81,9 +82,16 @@ export class Posse {
       egg.update();
       egg.draw();
     });
+
+    const initialEggs = this.eggs.length;
+    this.eggs = this.eggs.filter((egg) => !egg.expired);
+    const howManyExpired = initialEggs - this.eggs.length;
+    for (let i = 0; i < howManyExpired; i++) {
+      StatsStore.uhOhEggWentBad();
+    }
+
     const [living, dead] = partition(this.buddies, (buddy) => !buddy.allDone);
     this.buddies = living;
-    this.eggs = this.eggs.filter((egg) => !egg.expired);
     this.eggs = [...this.eggs, ...dead.map((b) => b.toEgg())];
     this.makeAllTheBuddies();
   }

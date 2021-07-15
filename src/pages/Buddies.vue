@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row items-center justify-evenly ummmm">
+  <q-page class="row items-center justify-around ummmm">
     <buddies-component></buddies-component>
   </q-page>
 </template>
