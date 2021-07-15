@@ -1,3 +1,4 @@
+import { Posse } from './posse';
 import SketchStore from 'src/store/sketch_store';
 import {
     AvoidBordersDrive,
@@ -103,8 +104,11 @@ export class Egg implements Renderable {
         this.outline = complement(p, color)[1];
     }
 
-    draw() {
+    update() {
         this.age++;
+    }
+
+    draw() {
         this.render();
         this.renderDebug();
     }
@@ -222,13 +226,17 @@ export class Buddy implements Renderable {
         return this.body.size() === 1;
     }
 
-    draw(buddies: Buddy[]) {
+    update(posse: Posse) {
         this.age++;
         if (this.age > BuddyStore.ageLimit) {
             this.alive = false;
         }
 
-        this.move(buddies);
+        this.move(posse.buddies);
+
+    }
+
+    draw() {
         this.render();
         this.renderDebug();
     }
