@@ -119,8 +119,8 @@ export class Egg implements Renderable {
       return;
     }
     p.push();
-    p.fill(this.color);
-    p.stroke(this.outline);
+    p.fill(this.alphaColor(this.color));
+    p.stroke(this.alphaColor(this.outline));
     p.ellipse(this.position.x, this.position.y, this.width, this.height);
     p.pop();
   }
@@ -133,6 +133,12 @@ export class Egg implements Renderable {
     d.fill(0, 0, 100, 1);
     d.textSize(32);
     d.text(this.debugText, this.position.x, this.position.y - 20);
+  }
+
+  private alphaColor(color: Color) {
+    const modifiedColor = this.p.color(color);
+    modifiedColor.setAlpha(this.alpha);
+    return modifiedColor;
   }
 
   private get debugText() {
@@ -170,6 +176,12 @@ export class Egg implements Renderable {
           ) * 4
         : 0)
     );
+  }
+
+  private get alpha() {
+    return !this.ready
+      ? 1
+      : (this.expirationAge - this.age) / (this.expirationAge - this.hatchAge);
   }
 
   private get almostReady() {
@@ -298,10 +310,12 @@ export class Buddy implements Renderable {
 
   drawForce(force: Vector, pos: Vector) {
     const forceVis = p5.Vector.mult(force, 10).add(pos);
+    this.p.push();
     this.p.stroke(this.secondaryColor);
     this.p.strokeWeight(4);
     this.p.noFill();
     this.p.line(pos.x, pos.y, forceVis.x, forceVis.y);
+    this.p.pop();
   }
 
   changeVelocity() {
@@ -340,11 +354,6 @@ export class Buddy implements Renderable {
   }
 
   toEgg() {
-    return new Egg(
-      this.p,
-      this.position,
-      this.colors[this.p.random(this.colors.length)],
-      this.generation + 1
-    );
+    return new Egg(this.p, this.position, this.colors[0], this.generation + 1);
   }
 }
