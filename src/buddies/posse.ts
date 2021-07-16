@@ -74,6 +74,30 @@ export class Posse {
   }
 
   doTheThing() {
+    this.updateThings();
+
+    this.checkEggspiration();
+
+    this.cleanupHibernateHatch();
+  }
+
+  private cleanupHibernateHatch() {
+    const [living, dead] = partition(this.buddies, (buddy) => !buddy.allDone);
+    this.buddies = living;
+    this.eggs = [...this.eggs, ...dead.map((b) => b.toEgg())];
+    this.makeAllTheBuddies();
+  }
+
+  private checkEggspiration() {
+    const initialEggs = this.eggs.length;
+    this.eggs = this.eggs.filter((egg) => !egg.expired);
+    const howManyExpired = initialEggs - this.eggs.length;
+    for (let i = 0; i < howManyExpired; i++) {
+      StatsStore.uhOhEggWentBad();
+    }
+  }
+
+  private updateThings() {
     this.buddies.forEach((buddy) => {
       buddy.update(this);
       buddy.draw();
@@ -82,17 +106,5 @@ export class Posse {
       egg.update();
       egg.draw();
     });
-
-    const initialEggs = this.eggs.length;
-    this.eggs = this.eggs.filter((egg) => !egg.expired);
-    const howManyExpired = initialEggs - this.eggs.length;
-    for (let i = 0; i < howManyExpired; i++) {
-      StatsStore.uhOhEggWentBad();
-    }
-
-    const [living, dead] = partition(this.buddies, (buddy) => !buddy.allDone);
-    this.buddies = living;
-    this.eggs = [...this.eggs, ...dead.map((b) => b.toEgg())];
-    this.makeAllTheBuddies();
   }
 }
