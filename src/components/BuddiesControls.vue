@@ -78,6 +78,14 @@
         color="accent"
         @click="clearScreen"
       />
+      
+      <q-btn
+        title="Kill Everything"
+        icon="fa fa-skull-crossbones"
+        push
+        color="accent"
+        @click="killEverything"
+      />
     </q-btn-group>
   </div>
 </template>
@@ -128,6 +136,9 @@ export default class BuddiesControls extends Vue {
   }
   clearScreen() {
     SketchStore.clearScreen();
+  }
+  killEverything() {
+    GameStore.posseMaybe().killEverything();
   }
 
   get playButtonIcon() {

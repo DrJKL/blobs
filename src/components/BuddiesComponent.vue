@@ -46,6 +46,7 @@ import BuddiesControls from './BuddiesControls.vue';
 import { Posse } from 'src/buddies/posse';
 
 import StatsStore from 'src/store/stats_store';
+import GameStore from 'src/store/game_store';
 
 @Options({
   name: 'Buddies!',
@@ -61,6 +62,7 @@ export default class ComponentName extends Vue {
     if (!this.p5Handle) {
       this.p5Handle = new p5(buddiesSketch(this.posse), this.p5Container);
     }
+    GameStore.initPosse(this.posse);
   }
   unmounted() {
     this.p5Handle?.noLoop();

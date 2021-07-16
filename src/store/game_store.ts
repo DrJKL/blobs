@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 // import { VuexModule, Module, Mutation, Action } from 'vuex-class-modules';
+import { Posse } from 'src/buddies/posse';
 import {
   VuexModule,
   Module,
@@ -28,6 +29,12 @@ export class GameStoreModule extends VuexModule {
   private readonly MAX_FOG_VALUE = 10;
   private readonly MAX_MAX_BUDDIES = 50;
 
+  public posseGetter!: () => Posse;
+
+  get posseMaybe() {
+    return this.posseGetter;
+  }
+
   @Mutation
   public setMaxBuddies(newMax: number) {
     this.maxBuddies = Math.max(0, Math.min(newMax, this.MAX_MAX_BUDDIES));
@@ -41,6 +48,11 @@ export class GameStoreModule extends VuexModule {
   @Mutation
   public alterFog(fogDelta: number) {
     this.fogValue += fogDelta;
+  }
+
+  @Mutation
+  public initPosse(posse: Posse) {
+    this.posseGetter = () => posse;
   }
 
   @Action

@@ -20,6 +20,12 @@ export class Posse {
     }
   }
 
+  killEverything() { // 😢
+    // TODO trigger death properly.
+    this.buddies = [];
+    this.eggs = [];
+  }
+
   makeAllTheBuddies() {
     const limitPerRound = Math.floor(Math.random() * 2);
     let buddiesThisRound = 0;
