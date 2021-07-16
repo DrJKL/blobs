@@ -62,6 +62,7 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
   }
 
   p.draw = () => {
+    debugOverlay?.clear();
     handleFog();
     posse?.doTheThing();
     if (overlay) {
@@ -90,7 +91,6 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
       });
     if (SketchStore.debugOn && debugOverlay) {
       // Do separately to respect debugOn
-      debugOverlay.clear();
       p.image(debugOverlay, 0, 0);
     }
   }
