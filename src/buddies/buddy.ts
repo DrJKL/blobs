@@ -188,7 +188,7 @@ export class Egg implements Renderable {
   }
 
   private get almostReady() {
-    return this.timeUntilReady < 200;
+    return this.timeUntilReady < this.hatchAge * 0.4;
   }
 
   private get timeUntilReady() {
