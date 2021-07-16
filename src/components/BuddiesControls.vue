@@ -9,7 +9,7 @@
             color="green"
             :step="1"
             :min="0"
-            :max="50"
+            :max="20"
             snap
             label
             dark
