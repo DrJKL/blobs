@@ -24,15 +24,26 @@ if (storeInstance.hasModule(name)) {
 export class SketchStoreModule extends VuexModule {
   // state
   public mainSketch: p5 | null = null;
+  public backgroundGraphic: Graphics | null = null;
+  public resourceGraphic: Graphics | null = null;
   public mainGraphic: Graphics | null = null;
   public overlayGraphic: Graphics | null = null;
   public debugGraphic: Graphics | null = null;
+
   public debugOn = false;
   public frameRate = 144;
 
   @Mutation
   public initP(newP: p5) {
     this.mainSketch = newP;
+  }
+  @Mutation
+  public initBackground(newP: Graphics) {
+    this.backgroundGraphic = newP;
+  }
+  @Mutation
+  public initResources(newP: Graphics) {
+    this.resourceGraphic = newP;
   }
   @Mutation
   public initGraphics(newP: Graphics) {
@@ -94,7 +105,6 @@ export class SketchStoreModule extends VuexModule {
 
   @Mutation
   public clearScreen() {
-    // this.mainSketch?.clear();
     this.mainGraphic?.clear();
     this.mainGraphic?.background(0);
   }
