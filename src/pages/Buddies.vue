@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row items-center justify-around ummmm">
+  <q-page class="row items-start justify-around ummmm">
     <buddies-component></buddies-component>
   </q-page>
 </template>
@@ -23,5 +23,6 @@ export default class PageIndex extends Vue {
 .ummmm {
   grid-column: 1;
   grid-row: 1;
+  padding-top: 10vh;
 }
 </style>
