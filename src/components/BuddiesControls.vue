@@ -55,7 +55,7 @@
       </q-field>
     </div>
     <q-btn-group>
-      <q-toggle v-model="debug" title="Debug" icon="fa fa-bug fa-stack-1x" />
+      <q-toggle v-model="debug" class="col-grow" title="Debug" icon="fa fa-bug fa-stack-1x" />
       <q-btn
         :title="playButtonText"
         :icon="playButtonIcon"
@@ -87,15 +87,18 @@
         @click="killEverything"
       />
     </q-btn-group>
+    <buddy-details-selector/>
   </div>
 </template>
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import GameStore from '../store/game_store';
 import SketchStore from '../store/sketch_store';
+import BuddyDetailsSelector from './BuddyDetailsSelector.vue';
 
 @Options({
   name: 'Buddies Controls',
+  components: {BuddyDetailsSelector},
 })
 export default class BuddiesControls extends Vue {
   get fogValue() {
