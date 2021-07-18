@@ -59,7 +59,7 @@ export default class BuddyDetailsSelector extends Vue {
   mounted() {
     this.march = timer(0, 1000).subscribe((i) => {
       this.focused++;
-      this.focused %= 5;
+      this.focused %= this.colors.length;
     });
   }
   unmounted() {
