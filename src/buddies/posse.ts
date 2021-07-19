@@ -7,10 +7,12 @@ import SketchStore from 'src/store/sketch_store';
 import { partition } from 'src/helpers/partition';
 import StatsStore from 'src/store/stats_store';
 import buddy_store from 'src/store/buddy_store';
+import { Plant } from './Plant';
 
 export class Posse {
   buddies: Buddy[] = [];
   eggs: Egg[] = [];
+  plants: Plant[] = [];
 
   get maxBuddies() {
     return GameStore.maxBuddies;
@@ -50,6 +52,20 @@ export class Posse {
     if (opt_location) {
       this.eggs.push(
         new Egg(p, opt_location, p.color(buddy_store.focusedColor.color))
+      );
+      return;
+    }
+  }
+  
+  plantSeed(opt_location?: Vector) {
+    const p = SketchStore.resourceGraphic;
+    if (!p) {
+      console.error('No resource graphics in SketchStore', SketchStore.resourceGraphic);
+      return;
+    }
+    if (opt_location) {
+      this.plants.push(
+        new Plant(p, opt_location, p.color(buddy_store.focusedColor.color))
       );
       return;
     }
@@ -116,6 +132,10 @@ export class Posse {
     this.eggs.forEach((egg) => {
       egg.update();
       egg.draw();
+    });
+    this.plants.forEach((plant) => {
+      plant.update();
+      plant.draw();
     });
   }
 }

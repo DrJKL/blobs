@@ -23,6 +23,7 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
     SketchStore.initGraphics(mainGraphics);
 
     backgroundGraphic = makeGraphic();
+    backgroundGraphic.background(0);
     SketchStore.initBackground(backgroundGraphic);
 
     resources = makeGraphic();
@@ -56,6 +57,7 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
     const fogValue = GameStore.fogValue;
     if (fogValue === 10) {
       mainGraphics.background(mainGraphics.color(0, 0, 0, 1));
+      mainGraphics.clear();
       return;
     }
     const backgroundFog = mainGraphics.color(0, 0, 0, fogValue * 0.05);
@@ -73,7 +75,9 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
     drawLayers();
   };
   function drawMouseTarget() {
-    if (!overlay) { return; }
+    if (!overlay) {
+      return;
+    }
     overlay.push();
     overlay.stroke(0, 0, 100, 0.8);
     overlay.strokeWeight(1);
@@ -83,7 +87,6 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
     overlay.circle(p.mouseX, p.mouseY, 10);
     overlay.pop();
   }
-  
 
   function drawLayers() {
     getGraphics()
@@ -112,9 +115,15 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
       p.mouseY > 0 &&
       p.mouseY < p.height
     ) {
-      posse?.layEgg(p.createVector(p.mouseX, p.mouseY));
+      switch (event.button) {
+        case 0:
+          posse?.layEgg(p.createVector(p.mouseX, p.mouseY));
+          break;
+        case 2:
+          posse?.plantSeed(p.createVector(p.mouseX, p.mouseY));
+          break;
+      }
     }
     return false;
   };
 };
-
