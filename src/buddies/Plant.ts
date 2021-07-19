@@ -1,7 +1,7 @@
 import SketchStore from 'src/store/sketch_store';
 import p5, { Vector, Color } from 'p5';
-import { analogous, complement, randomColor } from 'src/helpers/color_utils';
-import { Renderable, Buddy } from './buddy';
+import {   randomColor } from 'src/helpers/color_utils';
+import { Renderable } from './buddy';
 
 
 export class Plant implements Renderable {
@@ -26,14 +26,13 @@ export class Plant implements Renderable {
   }
 
   render() {
-    const p = this.p;
+    const p = SketchStore.resourceGraphic;
     if (!p) {
       return;
     }
     p.push();
     p.translate(this.position.x, this.position.y);
     p.fill(this.alphaColor(this.color));
-    p.rotate(p.random(-.05, .05) * p.TWO_PI);
     p.ellipse(0, 0, this.width, this.height);
     p.pop();
   }
@@ -62,7 +61,7 @@ export class Plant implements Renderable {
   }
 
   private get size() {
-    return 5;
+    return 20;
   }
   private get width() {
     return (
