@@ -58,9 +58,9 @@ export class Posse {
   }
   
   plantSeed(opt_location?: Vector) {
-    const p = SketchStore.resourceGraphic;
+    const p = SketchStore.mainSketch;
     if (!p) {
-      console.error('No resource graphics in SketchStore', SketchStore.resourceGraphic);
+      console.error('No Main Sketch in SketchStore', SketchStore.mainSketch);
       return;
     }
     if (opt_location) {
