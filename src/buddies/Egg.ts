@@ -17,6 +17,7 @@ export class Egg implements Renderable {
     readonly generation = 1
   ) {
     this.outline = complement(p, color)[1];
+    this.color.setAlpha(0.1);
   }
 
   update() {

@@ -11,7 +11,7 @@ import { analogous, randomColor } from 'src/helpers/color_utils';
 import BuddyStore from '../store/buddy_store';
 import Queue from 'src/helpers/queue';
 import { Egg } from './Egg';
-
+import buddy_store from '../store/buddy_store';
 
 function defaultDrives() {
   return [
@@ -96,7 +96,9 @@ export class Buddy implements Renderable {
   get maxSpeed() {
     return this.size / 4;
   }
-  maxLength = 25;
+  get maxLength() {
+    return buddy_store.buddyLength;
+  }
   body: Queue<Segment>;
   secondaryColor: Color;
 

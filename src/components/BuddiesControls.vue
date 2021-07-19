@@ -54,8 +54,49 @@
         </template>
       </q-field>
     </div>
+    <div class="column col justify-evenly">
+      <q-field filled :hint="`Lifetime ${buddyMaxAge}`">
+        <template #control>
+          <q-slider
+            v-model="buddyMaxAge"
+            class="col self-center buddies-slider"
+            color="orange"
+            :step="10"
+            :min="0"
+            :max="600"
+            snap
+            label
+            dark
+            @wheel="buddyMaxAgeScroll"
+          />
+        </template>
+      </q-field>
+    </div>
+    <div class="column col justify-evenly">
+      <q-field filled :hint="`Buddy Length ${buddyLength}`">
+        <template #control>
+          <q-slider
+            v-model="buddyLength"
+            class="col self-center buddies-slider"
+            color="amber"
+            :step="1"
+            :min="0"
+            :max="100"
+            snap
+            label
+            dark
+            @wheel="buddyLength"
+          />
+        </template>
+      </q-field>
+    </div>
     <q-btn-group>
-      <q-toggle v-model="debug" class="col-grow" title="Debug" icon="fa fa-bug fa-stack-1x" />
+      <q-toggle
+        v-model="debug"
+        class="col-grow"
+        title="Debug"
+        icon="fa fa-bug fa-stack-1x"
+      />
       <q-btn
         :title="playButtonText"
         :icon="playButtonIcon"
@@ -73,12 +114,12 @@
       />
       <q-btn
         title="Clear Screen"
-        icon="fa fa-trash-alt"
+        icon="fa fa-eraser"
         push
         color="accent"
         @click="clearScreen"
       />
-      
+
       <q-btn
         title="Kill Everything"
         icon="fa fa-skull-crossbones"
@@ -87,10 +128,11 @@
         @click="killEverything"
       />
     </q-btn-group>
-    <buddy-details-selector/>
+    <buddy-details-selector />
   </div>
 </template>
 <script lang="ts">
+import buddy_store from 'src/store/buddy_store';
 import { Options, Vue } from 'vue-class-component';
 import GameStore from '../store/game_store';
 import SketchStore from '../store/sketch_store';
@@ -98,7 +140,7 @@ import BuddyDetailsSelector from './BuddyDetailsSelector.vue';
 
 @Options({
   name: 'Buddies Controls',
-  components: {BuddyDetailsSelector},
+  components: { BuddyDetailsSelector },
 })
 export default class BuddiesControls extends Vue {
   get fogValue() {
@@ -118,6 +160,20 @@ export default class BuddiesControls extends Vue {
   }
   set frameRate(newValue: number) {
     SketchStore.setFrameRate(newValue);
+  }
+
+  get buddyMaxAge() {
+    return buddy_store.ageLimit;
+  }
+  set buddyMaxAge(newLimit: number) {
+    buddy_store.setAgeLimit(newLimit);
+  }
+
+  get buddyLength() {
+    return buddy_store.buddyLength;
+  }
+  set buddyLength(newLength: number) {
+    buddy_store.setBuddyLength(newLength);
   }
 
   get debug() {
@@ -159,6 +215,12 @@ export default class BuddiesControls extends Vue {
   }
   frameRateScroll(event: WheelEvent) {
     this.frameRate = this.frameRate - Math.sign(event.deltaY);
+  }
+  buddyMaxAgeScroll(event: WheelEvent) {
+    this.buddyMaxAge = this.buddyMaxAge - Math.sign(event.deltaY);
+  }
+  buddyMaxLengthScroll(event: WheelEvent) {
+    this.buddyLength = this.buddyLength - Math.sign(event.deltaY);
   }
 }
 </script>

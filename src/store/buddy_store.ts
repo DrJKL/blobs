@@ -27,6 +27,7 @@ export interface ColorAnimal {
 export class BuddyStoreModule extends VuexModule {
   // state
   public ageLimit = 300;
+  public buddyLength = 50;
   public colorRange = [0, 90];
   public focused = 0;
 
@@ -97,6 +98,11 @@ export class BuddyStoreModule extends VuexModule {
   @Mutation
   public setAgeLimit(newMax: number) {
     this.ageLimit = Math.max(0, newMax);
+  }
+
+  @Mutation
+  public setBuddyLength(newLength: number) {
+    this.buddyLength = newLength;
   }
 
   get focusedColor() {
