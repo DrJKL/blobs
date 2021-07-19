@@ -33,6 +33,14 @@ export class SketchStoreModule extends VuexModule {
   public debugOn = false;
   public frameRate = 144;
 
+  get isDebug() {
+    return this.debugOn;
+  }
+
+  get playing() {
+    return this.mainSketch?.isLooping() || false;
+  }
+
   @Mutation
   public initP(newP: p5) {
     this.mainSketch = newP;
@@ -77,6 +85,17 @@ export class SketchStoreModule extends VuexModule {
     this.mainSketch?.noLoop();
   }
 
+  @Mutation
+  public step() {
+    this.mainSketch?.redraw();
+  }
+
+  @Mutation
+  public clearScreen() {
+    this.mainGraphic?.clear();
+    this.mainGraphic?.background(0);
+  }
+  
   @Action
   public togglePlayState() {
     if (this.playing) {
@@ -94,25 +113,6 @@ export class SketchStoreModule extends VuexModule {
       this.pause();
     }
   }
-  @Mutation
-  public step() {
-    this.mainSketch?.redraw();
-  }
-
-  get playing() {
-    return this.mainSketch?.isLooping() || false;
-  }
-
-  @Mutation
-  public clearScreen() {
-    this.mainGraphic?.clear();
-    this.mainGraphic?.background(0);
-  }
-
-  get isDebug() {
-    return this.debugOn;
-  }
-
   @Action
   public toggleDebug() {
     this.setDebug(!this.debugOn);
