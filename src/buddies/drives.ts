@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Buddy, Egg } from './buddy';
+import { Buddy } from './buddy';
+import { Egg } from './Egg';
 import p5, { Vector } from 'p5';
 
 export interface Drive {

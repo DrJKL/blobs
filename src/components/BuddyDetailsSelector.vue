@@ -5,65 +5,47 @@
       :key="b"
       :color="b.color"
       :icon="toIcon(b)"
-      :disable="index !== focused"
+      :glossy="index === focused"
+      :outline="index !== focused"
+      :disable="marching"
       round
       push
       size="lg"
       @click="clickColor(b)"
     />
   </div>
+  <div>
+    <q-toggle v-model="marching" icon="fa fa-tachometer-alt" />
+  </div>
 </template>
 <script lang="ts">
 import { Subscription, timer } from 'rxjs';
+import buddy_store, { ColorAnimal } from 'src/store/buddy_store';
 import { Options, Vue } from 'vue-class-component';
-
-interface ColorAnimal {
-  color: string;
-  animal: string;
-}
 
 @Options({
   name: 'Buddy Details Selector',
 })
 export default class BuddyDetailsSelector extends Vue {
-  colors: ColorAnimal[] = [
-    {
-      color: 'red',
-      animal: 'crow',
-    },
-    {
-      color: 'orange',
-      animal: 'dove',
-    },
-    {
-      color: 'yellow',
-      animal: 'dragon',
-    },
-    {
-      color: 'green',
-      animal: 'kiwi-bird',
-    },
-    {
-      color: 'blue',
-      animal: 'hippo',
-    },
-    {
-      color: 'purple',
-      animal: 'otter',
-    },
-  ];
+  marchSub?: Subscription;
+  marching = false;
+  get colors() {
+    return buddy_store.colors;
+  }
 
-  focused = 0;
-  march?: Subscription;
+  get focused() {
+    return buddy_store.focused;
+  }
 
   mounted() {
-    this.march = timer(0, 1000).subscribe((i) => {
-      this.focused++;
-      this.focused %= this.colors.length;
+    this.marchSub = timer(0, 100).subscribe(() => {
+      if (this.marching) {
+        buddy_store.incrementFocus();
+      }
     });
   }
   unmounted() {
-    this.march?.unsubscribe();
+    this.marchSub?.unsubscribe();
   }
 
   toIcon(b: ColorAnimal) {
@@ -71,6 +53,7 @@ export default class BuddyDetailsSelector extends Vue {
   }
 
   clickColor(b: ColorAnimal) {
+    buddy_store.setFocus(b);
     console.log(`${JSON.stringify(b)} Clicked`);
   }
 }

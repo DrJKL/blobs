@@ -1,10 +1,12 @@
 import { Vector } from 'p5';
-import { Buddy, Egg } from './buddy';
+import { Buddy } from './buddy';
+import { Egg } from './Egg';
 
 import GameStore from 'src/store/game_store';
 import SketchStore from 'src/store/sketch_store';
 import { partition } from 'src/helpers/partition';
 import StatsStore from 'src/store/stats_store';
+import buddy_store from 'src/store/buddy_store';
 
 export class Posse {
   buddies: Buddy[] = [];
@@ -20,7 +22,8 @@ export class Posse {
     }
   }
 
-  killEverything() { // 😢
+  killEverything() {
+    // 😢
     // TODO trigger death properly.
     this.buddies = [];
     this.eggs = [];
@@ -45,7 +48,9 @@ export class Posse {
       return;
     }
     if (opt_location) {
-      this.eggs.push(new Egg(p, opt_location));
+      this.eggs.push(
+        new Egg(p, opt_location, p.color(buddy_store.focusedColor.color))
+      );
       return;
     }
   }

@@ -53,3 +53,8 @@ export function analogous(p: p5, color: Color): [Color, Color, Color] {
     const nColor2 = p.color(nHue2, sat, brightness);
     return [color, nColor1, nColor2];
 }
+
+
+export function randomColor(p: p5): Color {
+    return p.color(p.random(360), p.random(40, 100), p.random(80, 100));
+  }

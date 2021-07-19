@@ -3,6 +3,7 @@ import p5, { Graphics } from 'p5';
 
 import GameStore from 'src/store/game_store';
 import SketchStore from 'src/store/sketch_store';
+import buddy_store from 'src/store/buddy_store';
 
 export const buddiesSketch = (posse?: Posse) => (p: p5) => {
   let backgroundGraphic: Graphics | undefined;
@@ -78,6 +79,7 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
     overlay.strokeWeight(1);
     overlay.noFill();
     overlay.circle(p.mouseX, p.mouseY, 20);
+    overlay.fill(p.color(buddy_store.focusedColor.color));
     overlay.circle(p.mouseX, p.mouseY, 10);
     overlay.pop();
   }
