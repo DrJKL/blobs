@@ -2,21 +2,25 @@ import { Posse } from './posse';
 import SketchStore from 'src/store/sketch_store';
 import {
   AvoidBordersDrive,
+  AvoidEggsDrive,
   AvoidOtherBuddiesDrive,
+  AvoidPlantsDrive,
   Drive,
   MoveRandomly,
 } from './drives';
 import p5, { Vector, Color } from 'p5';
-import { analogous, randomColor } from 'src/helpers/color_utils';
+import { analogous, randomColor, complement } from 'src/helpers/color_utils';
 import BuddyStore from '../store/buddy_store';
 import Queue from 'src/helpers/queue';
 import { Egg } from './Egg';
 import buddy_store from '../store/buddy_store';
 
-function defaultDrives() {
+function defaultDrives(): Drive[] {
   return [
     new AvoidBordersDrive(),
     new AvoidOtherBuddiesDrive(),
+    new AvoidEggsDrive(),
+    new AvoidPlantsDrive(),
     new MoveRandomly(),
   ];
 }
@@ -114,8 +118,8 @@ export class Buddy implements Renderable {
     readonly colors: Color[] = analogous(p, randomColor(p)),
     readonly generation = 1
   ) {
-    this.secondaryColor = randomColor(p);
-    this.secondaryColor.setAlpha(0.2);
+    this.secondaryColor = complement(p, colors[0])[1];
+    this.secondaryColor.setAlpha(.8);
 
     pos.z = this.velocity.mag();
     this.body = new Queue<Segment>();
@@ -132,11 +136,11 @@ export class Buddy implements Renderable {
 
   update(posse: Posse) {
     this.age++;
-    if (this.age > BuddyStore.ageLimit) {
+    if (this.age > BuddyStore.ageLimit && BuddyStore.ageLimit <=600) {
       this.alive = false;
     }
 
-    this.move(posse.buddies);
+    this.move(posse);
   }
 
   draw() {
@@ -172,12 +176,12 @@ export class Buddy implements Renderable {
     return `${this.age} - ${this.generation}`;
   }
 
-  move(buddies: Buddy[]) {
+  move( posse: Posse) {
     for (const drive of this.drives) {
-      for (const goal of drive.getGoals(this.p, this, buddies)) {
+      for (const goal of drive.getGoals(this.p, this, posse)) {
         this.steer(goal);
       }
-      for (const force of drive.getForces(this.p, this, buddies)) {
+      for (const force of drive.getForces(this.p, this, posse)) {
         this.applyForce(force);
       }
     }

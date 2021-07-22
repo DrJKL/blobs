@@ -2,26 +2,27 @@
 import { Buddy } from './buddy';
 import { Egg } from './Egg';
 import p5, { Vector } from 'p5';
+import { Posse } from './posse';
 
 export interface Drive {
-  getGoals(p: p5, buddy: Buddy, buddies: Buddy[]): Vector[];
-  getForces(p: p5, buddy: Buddy, buddies: Buddy[]): Vector[];
+  getGoals(p: p5, buddy: Buddy, posse: Posse): Vector[];
+  getForces(p: p5, buddy: Buddy,  posse: Posse): Vector[];
 }
 export class XDrive implements Drive {
   goals: Vector[];
   constructor(_p: p5, goals: Vector[]) {
     this.goals = [...goals];
   }
-  getGoals(_p: p5, buddy: Buddy, _buddies: Buddy[]) {
+  getGoals(_p: p5, buddy: Buddy, _posse: Posse) {
     return this.goals.map((goal) => Vector.sub(goal, buddy.position));
   }
-  getForces(_p: p5, _buddy: Buddy, _buddies: Buddy[]) {
+  getForces(_p: p5, _buddy: Buddy, _posse: Posse) {
     return [];
   }
 }
 
 export class AvoidBordersDrive implements Drive {
-  getGoals(p: p5, buddy: Buddy, _buddies: Buddy[]) {
+  getGoals(p: p5, buddy: Buddy, _posse: Posse) {
     const position = buddy.position;
     if (!position) {
       return [];
@@ -42,16 +43,17 @@ export class AvoidBordersDrive implements Drive {
     }
     return goals;
   }
-  getForces(_p: p5, _buddy: Buddy, _buddies: Buddy[]) {
+  getForces(_p: p5, _buddy: Buddy, _posse: Posse) {
     return [];
   }
 }
 
 export class AvoidOtherBuddiesDrive implements Drive {
-  getGoals(_p: p5, _buddy: Buddy, _buddies: Buddy[]) {
+  getGoals(_p: p5, _buddy: Buddy, _posse: Posse) {
     return [];
   }
-  getForces(p: p5, buddy: Buddy, buddies: Buddy[]) {
+  getForces(p: p5, buddy: Buddy, posse: Posse) {
+    const buddies = posse.buddies;
     const forces = [];
     for (const other of buddies) {
       if (buddy === other) {
@@ -68,14 +70,28 @@ export class AvoidOtherBuddiesDrive implements Drive {
 }
 
 export class AvoidEggsDrive implements Drive {
-  getGoals(_p: p5, _buddy: Buddy, _buddies: Buddy[]) {
+  getGoals(_p: p5, _buddy: Buddy, _posse: Posse) {
     return [];
   }
-  getForces(p: p5, buddy: Buddy, buddies: Buddy[]) {
+  getForces(p: p5, buddy: Buddy, posse: Posse) {
     const forces = [];
-    const eggs: Egg[] = [];
+    const eggs: Egg[] = posse.eggs;
     for (const other of eggs) {
       forces.push(repel(p, other.position, buddy.position));
+    }
+    return forces;
+  }
+}
+
+export class AvoidPlantsDrive implements Drive {
+  getGoals(_p: p5, _buddy: Buddy, _posse: Posse) {
+    return [];
+  }
+  getForces(p: p5, buddy: Buddy, posse: Posse) {
+    const forces = [];
+    const plants = posse.plants;
+    for (const other of plants) {
+      forces.push(repel(p, other.position, buddy.position).mult(8));
     }
     return forces;
   }
@@ -86,10 +102,10 @@ export class MoveRandomly implements Drive {
   constructor() {
     this.ticks = 0;
   }
-  getGoals(_p: p5, _buddy: Buddy, _buddies: Buddy[]) {
+  getGoals(_p: p5, _buddy: Buddy, _posse: Posse) {
     return [];
   }
-  getForces(_p: p5, _buddy: Buddy, _buddies: Buddy[]) {
+  getForces(_p: p5, _buddy: Buddy, _posse: Posse) {
     this.ticks++;
     const forces = [];
     // if (this.ticks % 1 == 0) {
