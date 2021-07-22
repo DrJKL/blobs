@@ -1,7 +1,6 @@
 import { Posse } from './posse';
 import p5, { Graphics } from 'p5';
 
-import GameStore from 'src/store/game_store';
 import SketchStore from 'src/store/sketch_store';
 import buddy_store from 'src/store/buddy_store';
 
