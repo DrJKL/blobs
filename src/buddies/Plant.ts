@@ -77,6 +77,10 @@ export class Plant implements Renderable {
 }
 
 class Plant2 {
+  numPoints = 20;
+  distances = Array.from({ length: this.numPoints }).map(
+    (i, idx, arr) => idx / arr.length
+  );
   metaPoints: Wiggler[] = [];
 
   constructor(
@@ -88,19 +92,15 @@ class Plant2 {
     this.initMetas();
   }
   initMetas() {
-    const numPoints = 20;
-    let distances = Array.from({ length: numPoints }).map(
-      (i, idx) => idx / numPoints
-    );
-    distances = this.p.shuffle(distances) as number[];
-    for (let i = 0; i < numPoints; i++) {
-      const pc = distances[i];
-      const opc = i / numPoints;
+    
+    this.distances = this.p.shuffle(this.distances) as number[];
+    this.distances.forEach((pc, i, arr) => {
+      const opc = i / arr.length;
       const distance = pc * (50);
       const modAngle = 0.2 * this.p.TWO_PI;
       const mpp = p5.Vector.fromAngle(-opc * modAngle - modAngle, distance);
       this.metaPoints.push(new Wiggler(this.p, mpp));
-    }
+    });
   }
   moveMetas() {
     const p = SketchStore.mainSketch;
