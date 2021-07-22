@@ -29,6 +29,7 @@ export class Posse {
     // TODO trigger death properly.
     this.buddies = [];
     this.eggs = [];
+    this.plants = [];
   }
 
   makeAllTheBuddies() {

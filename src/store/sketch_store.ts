@@ -94,6 +94,8 @@ export class SketchStoreModule extends VuexModule {
   public clearScreen() {
     this.mainGraphic?.clear();
     this.mainGraphic?.background(0);
+    this.resourceGraphic?.clear();
+    this.resourceGraphic?.background(0);
   }
   
   @Action

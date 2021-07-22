@@ -17,13 +17,14 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
     p.createCanvas(WIDTH, HEIGHT);
     p.frameRate(144);
     p.noCursor();
+    p.colorMode(p.HSB, 360, 100, 100, 1);
     SketchStore.initP(p);
 
     mainGraphics = makeGraphic();
     SketchStore.initGraphics(mainGraphics);
 
     backgroundGraphic = makeGraphic();
-    backgroundGraphic.background(0);
+    backgroundGraphic.background(0, 1);
     SketchStore.initBackground(backgroundGraphic);
 
     resources = makeGraphic();
@@ -46,29 +47,24 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
     return newGraphic;
   }
 
-  function getGraphics() {
-    return [backgroundGraphic, resources, mainGraphics, overlay];
-  }
-
   function handleFog() {
-    if (!mainGraphics) {
+    if (!mainGraphics || !backgroundGraphic) {
       return;
     }
-    const fogValue = GameStore.fogValue;
-    if (fogValue === 10) {
-      mainGraphics.background(mainGraphics.color(0, 0, 0, 1));
-      mainGraphics.clear();
-      return;
-    }
-    const backgroundFog = mainGraphics.color(0, 0, 0, fogValue * 0.05);
-    mainGraphics.background(backgroundFog);
+    mainGraphics.clear();
+    resources?.clear();
+    // const backgroundFog = p.color(0, 0);
+    // mainGraphics?.background(backgroundFog);
+    // resources?.background(backgroundFog);
   }
 
   p.draw = () => {
     debugOverlay?.clear();
+
     handleFog();
     posse?.doTheThing();
     if (overlay) {
+      overlay.background(0)
       overlay.clear();
       drawMouseTarget();
     }
@@ -86,6 +82,15 @@ export const buddiesSketch = (posse?: Posse) => (p: p5) => {
     overlay.fill(p.color(buddy_store.focusedColor.color));
     overlay.circle(p.mouseX, p.mouseY, 10);
     overlay.pop();
+  }
+
+  function getGraphics() {
+    return [
+      backgroundGraphic,
+      resources,
+      mainGraphics,
+      overlay, //
+    ];
   }
 
   function drawLayers() {

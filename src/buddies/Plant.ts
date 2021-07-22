@@ -1,8 +1,7 @@
 import SketchStore from 'src/store/sketch_store';
 import p5, { Vector, Color } from 'p5';
-import {   randomColor } from 'src/helpers/color_utils';
+import { randomColor } from 'src/helpers/color_utils';
 import { Renderable } from './buddy';
-
 
 export class Plant implements Renderable {
   age = 0;
@@ -12,9 +11,7 @@ export class Plant implements Renderable {
     readonly position: Vector,
     readonly color: Color = randomColor(p),
     readonly generation = 1
-  ) {
-    this.color.setAlpha(0.1);
-  }
+  ) {}
 
   update() {
     this.age++;
@@ -32,7 +29,7 @@ export class Plant implements Renderable {
     }
     p.push();
     p.translate(this.position.x, this.position.y);
-    p.fill(this.alphaColor(this.color));
+    p.fill(this.color);
     p.ellipse(0, 0, this.width, this.height);
     p.pop();
   }
@@ -64,18 +61,13 @@ export class Plant implements Renderable {
     return 20;
   }
   private get width() {
-    return (
-      this.size)
-    ;
+    return this.size;
   }
   private get height() {
-    return (
-      this.size
-    );
+    return this.size;
   }
 
   private get alpha() {
     return 1;
   }
-
 }

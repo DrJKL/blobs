@@ -80,7 +80,7 @@
             class="col self-center buddies-slider"
             color="amber"
             :step="1"
-            :min="0"
+            :min="1"
             :max="100"
             snap
             label
