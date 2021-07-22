@@ -134,7 +134,8 @@ class Plant2 {
       c = p.color(
         (p.hue(c) + 2) % 360,
         p.saturation(c),
-        p.brightness(c)
+        p.brightness(c),
+        p.alpha(c)
       );
       p.stroke(c);
     }
