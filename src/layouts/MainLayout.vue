@@ -13,7 +13,10 @@
 
         <q-toolbar-title> Blob Friends </q-toolbar-title>
 
-        <q-tabs>
+        <q-tabs>        
+            <q-route-tab icon="fa fa-credit-card" to="/credits" exact>
+            <q-tooltip>Credits</q-tooltip>
+          </q-route-tab>
           <q-route-tab icon="fa fa-object-group" to="/art-i-guess" exact>
             <q-tooltip>Art, but Modern or something</q-tooltip>
           </q-route-tab>
