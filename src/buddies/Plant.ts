@@ -31,11 +31,6 @@ export class Plant implements Renderable {
       return;
     }
     this.audrey.draw();
-    // p.push();
-    // p.translate(this.position.x, this.position.y);
-    // p.fill(this.color);
-    // p.ellipse(0, 0, this.width, this.height);
-    // p.pop();
   }
 
   renderDebug() {
@@ -48,6 +43,12 @@ export class Plant implements Renderable {
     d.textSize(16);
     d.textAlign(d.CENTER, d.BASELINE);
     d.text(this.debugText, this.position.x, this.position.y - 16);
+    d.noFill();
+    d.stroke(d.color(0, 0, 100, 1));
+    d.ellipse(this.position.x, this.position.y, this.size);
+    for (const f of this.audrey.frondPoints) {
+      d.ellipse(f.pos.x, f.pos.y, 5);
+    }
     d.pop();
   }
 
@@ -62,7 +63,7 @@ export class Plant implements Renderable {
   }
 
   private get size() {
-    return 20;
+    return 50;
   }
   private get width() {
     return this.size;
@@ -78,38 +79,36 @@ export class Plant implements Renderable {
 
 class Plant2 {
   numPoints = 20;
-  distances = Array.from({ length: this.numPoints }).map(
-    (i, idx, arr) => idx / arr.length
-  );
-  metaPoints: Wiggler[] = [];
+  frondPoints: Wiggler[] = this.initFronds();
 
   constructor(
     readonly p: p5,
     readonly position: Vector,
     private color: Color = randomColor(p),
     readonly generation = 1
-  ) {
-    this.initMetas();
-  }
-  initMetas() {
-    
-    this.distances = this.p.shuffle(this.distances) as number[];
-    this.distances.forEach((pc, i, arr) => {
+  ) {}
+
+  initFronds() {
+    const distances = Array.from({ length: this.numPoints }).map(
+      (i, idx, arr) => idx / arr.length
+    );
+    return this.p.shuffle(distances).map((pc: number, i, arr) => {
       const opc = i / arr.length;
-      const distance = pc * (50);
+      const distance = pc * 50;
       const modAngle = 0.2 * this.p.TWO_PI;
       const mpp = p5.Vector.fromAngle(-opc * modAngle - modAngle, distance);
-      this.metaPoints.push(new Wiggler(this.p, mpp));
+      console.log({pc, opc, distance, mpp,}, mpp.mag());
+      return new Wiggler(this.p, mpp);
     });
   }
   moveMetas() {
     const p = SketchStore.mainSketch;
-    if (!p) { return; }
-    this.metaPoints.forEach((mp) => {
+    if (!p) {
+      return;
+    }
+    this.frondPoints.forEach((mp) => {
       const howMuch = 0.006 * p.sin(p.frameCount / mp.period) * mp.speed;
-      mp.pos.rotate(
-        howMuch
-      );
+      mp.pos.rotate(howMuch);
     });
   }
   draw() {
@@ -123,13 +122,15 @@ class Plant2 {
     p.stroke(c);
     p.noFill();
 
-    for (const mp of this.metaPoints) {
+    for (const mp of this.frondPoints) {
       p.strokeWeight(mp.weight);
       p.beginShape();
+      p.vertex(0, 0);
       const points2 = mp.makeZiggyPoints();
       for (const pt of points2) {
         p.curveVertex(pt.x, pt.y);
       }
+      p.vertex(mp.pos.x, mp.pos.y);
       p.endShape();
       c = p.color(
         (p.hue(c) + 2) % 360,
@@ -140,7 +141,7 @@ class Plant2 {
       p.stroke(c);
     }
     p.pop();
-   this.moveMetas();
+    this.moveMetas();
   }
 }
 
@@ -161,7 +162,6 @@ class Wiggler {
     const destination = this.pos;
     const totalDistance = destination.mag();
     const ziggyPoints = [];
-    ziggyPoints.push(this.p.createVector());
     const ziggyPts = Math.pow(totalDistance / this.waves, 1.2);
     for (let i = 0; i < ziggyPts; i++) {
       const pc = i / ziggyPts;
@@ -174,7 +174,7 @@ class Wiggler {
       p.add(tangent);
       ziggyPoints.push(p);
     }
-    ziggyPoints.push(destination);
+    // ziggyPoints.push(destination);
     return ziggyPoints;
   }
 }
